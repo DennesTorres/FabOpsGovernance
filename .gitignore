@@ -427,3 +427,12 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# ── FabOps additions ─────────────────────────────────────
+# Azure Functions local secrets
+local.settings.json
+
+# Vite build output and local env overrides
+src/FabOps.Web/dist/
+.env.local
+.env.*.local

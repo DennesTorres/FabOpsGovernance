@@ -1,0 +1,120 @@
+import { useEffect, useMemo, useState } from 'react';
+import { HttpAgent } from '@ag-ui/client';
+import { CopilotChat, CopilotKitProvider, useRenderTool } from '@copilotkit/react-core/v2';
+import { useAuth } from '../auth/AuthProvider';
+import { apiUrl } from '../config';
+import { RenderPrimitivesRegistrar } from '../components/render/registerRenderPrimitives';
+import AgentAvatar from '../components/AgentAvatar';
+
+const AGENT_ID = 'default';
+
+/**
+ * Fallback renderer for tool calls that have no component of their own — the agent's
+ * backend tools (rules manager, rule processor, docs search). Preserves the reference
+ * project's "Calling tool: …" activity bubbles.
+ */
+function ToolActivityRegistrar() {
+  useRenderTool({
+    name: '*',
+    render: ({ name, status }: { name?: string; status?: string }) => (
+      <div className="tool-activity">
+        <span className={`tool-activity-dot${status === 'complete' ? ' done' : ''}`} />
+        <span>{status === 'complete' ? 'Used tool' : 'Calling tool'}: <code>{name}</code></span>
+      </div>
+    ),
+  }, []);
+  return null;
+}
+
+export default function ChatPage() {
+  const { getApiToken } = useAuth();
+  const [ready, setReady] = useState(false);
+  const [configError, setConfigError] = useState<string | null>(null);
+  // "Clear conversation" starts a fresh AG-UI thread, like the reference UI did.
+  const [threadId, setThreadId] = useState(() => crypto.randomUUID());
+  const [chatError, setChatError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch(apiUrl('/api/config'))
+      .then(r => r.json())
+      .then((data: { agent_url: string | null }) => {
+        if (!data.agent_url) throw new Error('Agent__Url is not configured on the FabOps API.');
+        setReady(true);
+      })
+      .catch((e: Error) => setConfigError(e.message));
+  }, []);
+
+  // The browser talks AG-UI straight to the Function App (no runtime tier in between);
+  // the user's token rides along for App Service Authentication in Azure.
+  const agent = useMemo(
+    () =>
+      new HttpAgent({
+        url: apiUrl('/api/agent'),
+        fetch: async (input, init) => {
+          const token = await getApiToken();
+          const headers = new Headers(init?.headers);
+          if (token) headers.set('Authorization', `Bearer ${token}`);
+          return window.fetch(input, { ...init, headers });
+        },
+      }),
+    [getApiToken],
+  );
+
+  if (configError) {
+    return (
+      <div className="chat-page">
+        <div className="chat-area">
+          <div className="messages-container">
+            <div className="empty-state">
+              <strong>Agent not configured</strong>
+              {configError}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="chat-page">
+      <CopilotKitProvider
+        selfManagedAgents={{ [AGENT_ID]: agent }}
+        showDevConsole={false}
+        onError={(e) => setChatError(e?.error?.message ?? 'The agent request failed.')}
+      >
+        <RenderPrimitivesRegistrar />
+        <ToolActivityRegistrar />
+        <div className="chat-area">
+          <div className="chat-agent-header">
+            <span className="chat-agent-avatar"><AgentAvatar size={40} /></span>
+            <span className="chat-agent-meta">
+              <span className="chat-agent-name">FabOps Copilot</span>
+              <span className="chat-agent-sub">Your Microsoft Fabric governance assistant</span>
+            </span>
+          </div>
+          {chatError && (
+            <div className="msg-error" style={{ margin: '8px 0' }}>{chatError}</div>
+          )}
+          <CopilotChat
+            agentId={AGENT_ID}
+            threadId={threadId}
+            className="fabops-chat dark"
+            labels={{
+              chatInputPlaceholder: ready
+                ? 'Describe a rule or ask about your Fabric governance…'
+                : 'Checking agent configuration…',
+              welcomeMessageText:
+                'Try: "every lakehouse in production must be assigned to a capacity" — or ask FabOps Copilot to list existing rules.',
+              chatDisclaimerText: '',
+            }}
+          />
+          <div className="chat-actions">
+            <button className="btn-secondary" onClick={() => setThreadId(crypto.randomUUID())}>
+              Clear conversation
+            </button>
+          </div>
+        </div>
+      </CopilotKitProvider>
+    </div>
+  );
+}

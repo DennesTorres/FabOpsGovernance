@@ -1,0 +1,48 @@
+# Deploys the SPA (FabOps.Web) to Azure Static Web Apps.
+#
+# One-time setup:
+#   1. Create the Static Web App (Standard or Free) in the Azure portal with
+#      "Other" as the deployment source.
+#   2. Repo Settings → Secrets and variables → Actions:
+#        secret  AZURE_STATIC_WEB_APPS_API_TOKEN  = the SWA deployment token
+#        variable VITE_API_BASE_URL               = https://<your-function-app>.azurewebsites.net
+#      (The SPA calls the Function App directly — the SWA /api proxy has a 45 s
+#       request limit that would cut off long agent runs. See docs/DECISIONS.md D02.)
+
+name: Deploy Web (Static Web App)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/FabOps.Web/**"
+      - ".github/workflows/deploy-web.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: src/FabOps.Web/package-lock.json
+
+      - name: Build
+        working-directory: src/FabOps.Web
+        env:
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          action: upload
+          app_location: src/FabOps.Web/dist
+          skip_app_build: true

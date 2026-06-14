@@ -1,0 +1,14 @@
+/*
+ * Cascade-layer order for the whole app. Declared once, before any stylesheet loads, so the
+ * order is fixed regardless of import timing.
+ *
+ *   reset      — the reference UI's global reset (styles/app.css). Lowest priority, so it never
+ *                overrides CopilotKit's Tailwind utilities inside the chat.
+ *   properties / theme / base / components / utilities
+ *              — CopilotKit v2's own Tailwind v4 layers (utilities highest, so chat spacing wins).
+ *
+ * The reference UI's component rules (everything else in app.css) and our additions stay
+ * UNLAYERED, so they always win on the shared pages. CopilotKit's preflight is itself scoped to
+ * [data-copilotkit], so it never reaches the shell — the two surfaces are cleanly isolated.
+ */
+@layer reset, properties, theme, base, components, utilities;

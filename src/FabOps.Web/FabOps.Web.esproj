@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.5776312">
+
+  <PropertyGroup>
+    <!-- F5 in Visual Studio starts the Vite dev server (proxies /api to the Functions host). -->
+    <StartupCommand>npm run dev</StartupCommand>
+    <JavaScriptTestRoot>src\</JavaScriptTestRoot>
+    <!-- Keep solution builds fast: the production bundle (npm run build → dist/) is produced
+         by the deployment workflow; set to true if you want Build to emit it as well. -->
+    <ShouldRunBuildScript>false</ShouldRunBuildScript>
+    <BuildOutputFolder>$(MSBuildProjectDirectory)\dist</BuildOutputFolder>
+  </PropertyGroup>
+
+</Project>

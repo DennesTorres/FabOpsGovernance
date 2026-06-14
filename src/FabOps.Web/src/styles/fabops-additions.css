@@ -1,0 +1,267 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   Additions for the rebuilt app: CopilotKit chat surface theming + the six
+   render primitives (docs/ui-render-primitives.md). app.css is the reference
+   project's stylesheet, kept verbatim for visual parity; everything new
+   lives here.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* ─── CopilotChat inside the FabOps shell ─────── */
+.chat-page .chat-area { display: flex; flex-direction: column; min-height: 0; }
+.fabops-chat {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  color-scheme: dark;
+}
+
+/*
+ * CopilotKit v2 themes with shadcn-style semantic variables defined on [data-copilotkit]
+ * (with a `.dark` class that flips them). We add `dark` on the chat root and re-point those
+ * variables to the FabOps palette so the surface matches the rest of the app. Literal hex is
+ * used (not var(--primary) etc.) to avoid circular references with app.css's like-named tokens.
+ * Unlayered + this specificity overrides CopilotKit's layered defaults.
+ */
+.fabops-chat[data-copilotkit],
+.fabops-chat [data-copilotkit] {
+  --background: #0b1322;            /* chat surface, just above the page bg */
+  --foreground: #f1f5f9;
+  --card: #131f35;
+  --card-foreground: #f1f5f9;
+  --popover: #131f35;
+  --popover-foreground: #f1f5f9;
+  --primary: #6366f1;              /* indigo — user bubble & primary accents */
+  --primary-foreground: #ffffff;
+  --secondary: #1a2845;
+  --secondary-foreground: #f1f5f9;
+  --muted: #1a2845;
+  --muted-foreground: #8aa0c0;
+  --accent: #1a2845;
+  --accent-foreground: #f1f5f9;
+  --destructive: #f87171;
+  --destructive-foreground: #ffffff;
+  --border: #24365c;
+  --input: #24365c;
+  --ring: #6366f1;
+  --radius: 12px;
+}
+
+/* Extend the chat to fill the screen — override CopilotKit's narrow centered column. */
+.chat-page { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.chat-page .chat-area { flex: 1; min-height: 0; }
+.fabops-chat .max-w-3xl { max-width: min(72rem, 100%) !important; }
+
+/* Friendly agent header — gives the agent a face at the top of the conversation. */
+.chat-agent-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  margin: 0 0 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, var(--bg-card), var(--bg-surface));
+}
+.chat-agent-avatar { display: inline-flex; flex-shrink: 0; }
+.chat-agent-meta { display: flex; flex-direction: column; line-height: 1.3; }
+.chat-agent-name { font-weight: 700; color: var(--text-head); font-size: 14px; }
+.chat-agent-sub { font-size: 12px; color: var(--muted-light); }
+
+/* ─── Backend tool activity (the reference UI's "Calling tool" bubbles) ─── */
+.tool-activity {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+  padding: 6px 12px;
+  border: 1px dashed var(--border-bright);
+  border-radius: var(--radius);
+  background: var(--primary-subtle);
+  color: var(--muted-light);
+  font-size: 12px;
+}
+.tool-activity code { color: var(--primary-light); font-size: 12px; }
+.tool-activity-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent);
+  animation: tool-pulse 1.2s ease-in-out infinite;
+}
+.tool-activity-dot.done { background: var(--success); animation: none; }
+@keyframes tool-pulse { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+
+/* ─── Render primitives ───────────────────────── */
+.rp {
+  margin: 10px 0;
+  font-size: 13px;
+  color: var(--text);
+}
+.rp-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--muted-light);
+  margin-bottom: 8px;
+}
+
+/* Status pills + tones */
+.rp-pill {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+.tone-neutral { background: var(--bg-elevated); color: var(--text-bright); border-color: var(--border-bright); }
+.tone-info    { background: var(--primary-subtle); color: var(--primary-light); border-color: rgba(99,102,241,.4); }
+.tone-success { background: var(--success-bg); color: var(--success); border-color: rgba(16,185,129,.4); }
+.tone-warning { background: rgba(251,191,36,.12); color: var(--warning); border-color: rgba(251,191,36,.4); }
+.tone-danger  { background: var(--error-bg); color: var(--error); border-color: rgba(248,113,113,.4); }
+
+/* Table */
+.rp-table table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.rp-table th, .rp-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.rp-table th {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--muted-light);
+  background: var(--bg-surface);
+}
+.rp-table tr:last-child td { border-bottom: none; }
+.rp-table td { color: var(--text-bright); }
+.rp-footnote { margin-top: 6px; font-size: 12px; color: var(--muted-light); }
+
+/* Donut */
+.rp-donut-body { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.rp-donut-chart { position: relative; width: 120px; height: 120px; }
+.rp-donut-track { stroke: var(--bg-elevated); }
+.rp-donut-seg.tone-neutral { stroke: var(--muted-light); }
+.rp-donut-seg.tone-info    { stroke: var(--primary-light); }
+.rp-donut-seg.tone-success { stroke: var(--success); }
+.rp-donut-seg.tone-warning { stroke: var(--warning); }
+.rp-donut-seg.tone-danger  { stroke: var(--error); }
+.rp-donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-head);
+}
+.rp-legend { list-style: none; display: flex; flex-direction: column; gap: 6px; padding: 0; }
+.rp-legend li { display: flex; align-items: center; gap: 8px; }
+.rp-legend-label { color: var(--text-bright); }
+.rp-legend-value { color: var(--muted-light); font-variant-numeric: tabular-nums; }
+.rp-legend-row { flex-direction: row; gap: 16px; margin-top: 6px; }
+.rp-swatch {
+  width: 10px; height: 10px; border-radius: 3px; display: inline-block;
+  background: var(--muted-light);
+}
+.rp-swatch.tone-info    { background: var(--primary-light); }
+.rp-swatch.tone-success { background: var(--success); }
+.rp-swatch.tone-warning { background: var(--warning); }
+.rp-swatch.tone-danger  { background: var(--error); }
+
+/* Chart */
+.rp-chart svg { max-width: 420px; }
+.rp-axis { stroke: var(--border-bright); stroke-width: 1; }
+.rp-tick, .rp-axis-label { fill: var(--muted-light); font-size: 9px; }
+.rp-bar.rp-series-0, .rp-swatch.rp-series-0 { fill: var(--primary); background: var(--primary); }
+.rp-bar.rp-series-1, .rp-swatch.rp-series-1 { fill: var(--accent); background: var(--accent); }
+.rp-bar.rp-series-2, .rp-swatch.rp-series-2 { fill: var(--success); background: var(--success); }
+.rp-bar.rp-series-3, .rp-swatch.rp-series-3 { fill: var(--warning); background: var(--warning); }
+.rp-line { stroke-width: 2; fill: none; }
+.rp-line.rp-series-0 { stroke: var(--primary); }
+.rp-line.rp-series-1 { stroke: var(--accent); }
+.rp-line.rp-series-2 { stroke: var(--success); }
+.rp-line.rp-series-3 { stroke: var(--warning); }
+
+/* Card */
+.rp-card {
+  display: flex;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  max-width: 480px;
+}
+.rp-card-accent { width: 4px; flex-shrink: 0; background: var(--muted-light); }
+.rp-card.tone-info    .rp-card-accent { background: var(--primary); }
+.rp-card.tone-success .rp-card-accent { background: var(--success); }
+.rp-card.tone-warning .rp-card-accent { background: var(--warning); }
+.rp-card.tone-danger  .rp-card-accent { background: var(--error); }
+.rp-card-content { padding: 14px 16px; flex: 1; }
+.rp-card-title { font-size: 15px; font-weight: 700; color: var(--text-head); }
+.rp-card-subtitle { font-size: 12px; color: var(--muted-light); margin-top: 2px; }
+.rp-card-body { margin-top: 8px; color: var(--text); }
+.rp-card-items { margin-top: 10px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px 16px; }
+.rp-card-item dt {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--muted-light);
+}
+.rp-card-item dd { color: var(--text-bright); margin: 0; }
+
+/* Badge */
+.rp-badge-wrap { display: inline-flex; align-items: center; gap: 8px; margin: 4px 0; }
+.rp-badge-detail { font-size: 12px; color: var(--muted-light); }
+
+/* Code */
+.rp-code {
+  background: #0a101f;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  max-width: 640px;
+}
+.rp-code-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+}
+.rp-code-title { font-size: 12px; color: var(--muted-light); font-family: ui-monospace, "Cascadia Code", Consolas, monospace; }
+.rp-code-lang {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid rgba(34, 211, 238, .35);
+  border-radius: 4px;
+  padding: 1px 7px;
+}
+.rp-code pre {
+  padding: 14px 16px;
+  overflow-x: auto;
+  margin: 0;
+}
+.rp-code code {
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #a5d6ff;
+  white-space: pre;
+}

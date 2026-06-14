@@ -1,12 +1,17 @@
 # UI Render Primitives — Tool Contract
 
-The chat surface renders **components, not markdown**. Six display-only primitives are
-registered on the frontend as components-as-tools (CopilotKit v2 `useComponent`). The agent
-renders rich UI by *calling these tools*; the tool arguments become the component's typed props.
-There is no handler anywhere for them: CopilotKit forwards the declarations in
-`RunAgentInput.tools` on every run, the FabOps API relays the run to the agent endpoint
-untouched, and the agent (e.g. ADK with `AGUIToolset()`) surfaces them to the model and streams
-the calls back to the browser.
+The chat surface renders **components, not markdown**. Seven display-only tools are registered on
+the frontend as components-as-tools (CopilotKit v2 `useComponent`) — six component types, with the
+chart offered as both a bar and a line tool. The agent renders rich UI by *calling these tools*;
+the tool arguments become the component's typed props, and there is no frontend handler —
+CopilotKit draws the component inline from the streamed call.
+
+The deployed Foundry orchestrator is a prompt agent on the OpenAI-Responses protocol: it owns its
+tools and prompt server-side and rejects client-supplied `tools`/`instructions`, so the FabOps API
+relay forwards only the conversation and cannot inject these tools. The definitions below are
+therefore the **contract to mirror on the agent** — declare the tools there with the same names,
+parameters, and casing, and the relay translates the agent's `function_call` events into AG-UI
+`TOOL_CALL_*` events that render the matching frontend components.
 
 These definitions are canonical. The tool names, parameter names, and casing below must match
 the frontend registration (`FabOps.Web/src/components/render/registerRenderPrimitives.tsx`)
@@ -78,22 +83,39 @@ Proportional breakdown — pass/fail/error split of a compliance run, rules by s
 }
 ```
 
-## render_chart
+## render_bar_chart
 
-Bar or line series — results over time, counts per workspace.
+Bar chart — compare a measure across categories: violations by severity, failing items per
+workspace, rules per governance domain. (`kind` is fixed by the tool, so it is not a parameter.)
 
 | Parameter | Type | Req | Notes |
 |---|---|---|---|
 | `title` | string | no | |
-| `kind` | `"bar" \| "line"` | yes | |
 | `xLabel`, `yLabel` | string | no | Axis labels |
 | `series` | `{ name?, points: { x: string \| number, y: number }[] }[]` | yes | One or more series |
 
 ```json
 {
   "title": "Failures by workspace",
-  "kind": "bar",
   "series": [ { "points": [ { "x": "Sales", "y": 4 }, { "x": "Finance", "y": 1 } ] } ]
+}
+```
+
+## render_line_chart
+
+Line chart — show a measure changing over time: compliance rate week over week, new violations
+across a release. (`kind` is fixed by the tool, so it is not a parameter.)
+
+| Parameter | Type | Req | Notes |
+|---|---|---|---|
+| `title` | string | no | |
+| `xLabel`, `yLabel` | string | no | Axis labels |
+| `series` | `{ name?, points: { x: string \| number, y: number }[] }[]` | yes | One or more series |
+
+```json
+{
+  "title": "Compliance rate by week",
+  "series": [ { "points": [ { "x": "W1", "y": 72 }, { "x": "W2", "y": 81 }, { "x": "W3", "y": 88 } ] } ]
 }
 ```
 

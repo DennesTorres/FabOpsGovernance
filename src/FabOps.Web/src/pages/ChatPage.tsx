@@ -89,21 +89,23 @@ export default function ChatPage() {
         <SampleQuestions agentId={AGENT_ID} />
         <div className="chat-area">
           <div className="env-notice-wrap">
-            <button
-              type="button"
-              className="env-notice-btn"
-              aria-label="About this environment"
-              title="About this environment"
-              aria-expanded={showNotice}
-              onClick={() => setShowNotice((o) => !o)}
-            >?</button>
+            <span className="env-notice-lead">
+              <span className="env-notice-dot" aria-hidden="true" />
+              Test environment
+              <button
+                type="button"
+                className="env-notice-btn"
+                aria-label="Why this is a test environment"
+                aria-expanded={showNotice}
+                onClick={() => setShowNotice((o) => !o)}
+              >?</button>
+            </span>
             {showNotice && (
               <div className="env-notice-pop" role="dialog">
                 <button type="button" className="env-notice-pop-close" onClick={() => setShowNotice(false)} aria-label="Close">✕</button>
-                <strong>Test environment.</strong> This assistant runs against a sample Microsoft
-                Fabric tenant for demonstration only. In production, FabOps is set up against your
-                enterprise's own Fabric environment for accurate results. Support for additional
-                models is planned.
+                This assistant runs against a sample Microsoft Fabric tenant for demonstration
+                only. In production, FabOps is set up against your enterprise's own Fabric
+                environment for accurate results. Support for additional models is planned.
               </div>
             )}
           </div>

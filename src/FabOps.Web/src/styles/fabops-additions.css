@@ -53,15 +53,22 @@
 .fabops-chat .max-w-3xl,
 .fabops-chat .cpk\:max-w-3xl { max-width: 100% !important; }
 
-/* ─── Test-environment notice (FabOps) — compact amber "?" with a popover ─── */
+/* ─── Test-environment notice (FabOps) — first sentence visible + "?" opens the rest ─── */
 .env-notice-wrap { position: absolute; top: 12px; left: 16px; z-index: 20; }
+.env-notice-lead {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 4px 7px 4px 11px; border-radius: 999px;
+  background: #fcd34d; color: #5b3d00; border: 1px solid #d9a400;
+  font-size: 12px; font-weight: 700;
+}
+.env-notice-dot { width: 7px; height: 7px; border-radius: 50%; background: #b45309; flex-shrink: 0; }
 .env-notice-btn {
-  width: 22px; height: 22px; border-radius: 50%;
-  border: 1px solid #d9a400; background: #fcd34d; color: #5b3d00;
-  font-size: 13px; font-weight: 800; line-height: 1; cursor: pointer;
+  width: 18px; height: 18px; border-radius: 50%;
+  border: none; background: rgba(91, 61, 0, .22); color: #5b3d00;
+  font-size: 11px; font-weight: 800; line-height: 1; cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center;
 }
-.env-notice-btn:hover { background: #fbbf24; }
+.env-notice-btn:hover { background: rgba(91, 61, 0, .35); }
 .env-notice-pop {
   position: absolute; top: 28px; left: 0; width: 340px; max-width: 78vw;
   background: var(--bg-card); border: 1px solid var(--border-bright);

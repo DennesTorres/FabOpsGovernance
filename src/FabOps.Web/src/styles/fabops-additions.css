@@ -53,6 +53,22 @@
 .fabops-chat .max-w-3xl,
 .fabops-chat .cpk\:max-w-3xl { max-width: 100% !important; }
 
+/* ─── Test-environment notice (FabOps) ─── */
+.env-notice {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin: 12px 24px 0; padding: 10px 14px;
+  border: 1px solid var(--border-bright); border-radius: var(--radius);
+  background: var(--primary-subtle); color: var(--muted-light);
+  font-size: 12.5px; line-height: 1.5;
+}
+.env-notice-icon { color: var(--primary-light); flex-shrink: 0; font-weight: 700; }
+.env-notice-text strong { color: var(--text-bright); }
+.env-notice-close {
+  margin-left: auto; flex-shrink: 0; background: none; border: none;
+  color: var(--muted-light); cursor: pointer; font-size: 14px; line-height: 1;
+}
+.env-notice-close:hover { color: var(--text-head); }
+
 /* ─── Per-turn identity rows ───────────────────
    Every assistant turn shows the agent avatar + name (the look that used to be a one-off
    header); user turns use the same layout with a distinct avatar and label. */

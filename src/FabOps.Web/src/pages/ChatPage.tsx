@@ -34,6 +34,7 @@ export default function ChatPage() {
   // "Clear conversation" starts a fresh AG-UI thread, like the reference UI did.
   const [threadId, setThreadId] = useState(() => crypto.randomUUID());
   const [chatError, setChatError] = useState<string | null>(null);
+  const [showNotice, setShowNotice] = useState(true);
 
   useEffect(() => {
     fetch(apiUrl('/api/config'))
@@ -87,6 +88,18 @@ export default function ChatPage() {
         <ToolActivityRegistrar />
         <SampleQuestions agentId={AGENT_ID} />
         <div className="chat-area">
+          {showNotice && (
+            <div className="env-notice">
+              <span className="env-notice-icon" aria-hidden="true">ⓘ</span>
+              <span className="env-notice-text">
+                <strong>Test environment.</strong> This assistant runs against a sample Microsoft
+                Fabric tenant for demonstration only. In production, FabOps is set up against your
+                enterprise's own Fabric environment for accurate results. Support for additional
+                models is planned.
+              </span>
+              <button className="env-notice-close" onClick={() => setShowNotice(false)} aria-label="Dismiss notice">✕</button>
+            </div>
+          )}
           {chatError && (
             <div className="msg-error" style={{ margin: '8px 0' }}>{chatError}</div>
           )}

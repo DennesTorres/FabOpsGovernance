@@ -543,7 +543,7 @@ body { background: var(--bg); }
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background-image: radial-gradient(circle, rgba(99,102,241,.13) 1px, transparent 1px);
+  background-image: radial-gradient(circle, var(--primary-subtle) 1px, transparent 1px);
   background-size: 36px 36px;
   mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 90%);
   z-index: 0;
@@ -557,9 +557,9 @@ body { background: var(--bg); }
   align-items: center;
   padding: 80px 40px;
   background:
-    radial-gradient(ellipse 60% 70% at 15% 40%, rgba(99,102,241,.15) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 60% at 85% 70%, rgba(34,211,238,.08) 0%, transparent 70%),
-    linear-gradient(160deg, #080d1a 0%, #0c1428 50%, #080d1a 100%);
+    radial-gradient(ellipse 60% 70% at 15% 40%, var(--primary-glow) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 85% 70%, var(--accent-glow) 0%, transparent 70%),
+    linear-gradient(160deg, var(--bg) 0%, var(--bg-surface) 50%, var(--bg) 100%);
   overflow: hidden;
   z-index: 1;
 }
@@ -572,12 +572,12 @@ body { background: var(--bg); }
 }
 .hero-glow-l {
   width: 500px; height: 500px;
-  background: rgba(99,102,241,.12);
+  background: var(--primary-glow);
   top: -100px; left: -100px;
 }
 .hero-glow-r {
   width: 400px; height: 400px;
-  background: rgba(34,211,238,.07);
+  background: var(--accent-glow);
   bottom: -60px; right: -60px;
 }
 
@@ -621,7 +621,7 @@ body { background: var(--bg); }
   color: var(--text-head);
 }
 .hero-hl-accent {
-  background: linear-gradient(135deg, #6366f1 0%, #22d3ee 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -662,11 +662,11 @@ body { background: var(--bg); }
   cursor: pointer;
   width: fit-content;
   transition: background .15s, box-shadow .15s, transform .1s;
-  box-shadow: 0 0 30px rgba(99,102,241,.35);
+  box-shadow: 0 0 30px var(--primary-glow);
 }
 .btn-cta:hover {
   background: var(--primary-dark);
-  box-shadow: 0 0 40px rgba(99,102,241,.5);
+  box-shadow: 0 0 40px var(--primary-glow);
   transform: translateY(-1px);
 }
 
@@ -681,7 +681,7 @@ body { background: var(--bg); }
   border: 1px solid var(--border-bright);
   border-radius: var(--radius-xl);
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,.5), 0 0 0 1px rgba(99,102,241,.1);
+  box-shadow: 0 16px 48px rgba(15,40,60,.18), 0 0 0 1px var(--primary-subtle);
 }
 .demo-card-hdr {
   display: flex;

@@ -82,3 +82,18 @@ export const renderCodeSchema = z.object({
   title: z.string().optional().describe('e.g. the rule file name'),
 });
 export type RenderCodeProps = z.infer<typeof renderCodeSchema>;
+
+export const renderKpiSchema = z.object({
+  items: z
+    .array(z.object({
+      label: z.string().describe('Caption under the number'),
+      value: z.string().describe('The headline value as a string, e.g. "12", "87%", "3/5"'),
+      sublabel: z.string().optional().describe('Small secondary line under the label'),
+      tone: z
+        .enum(['pass', 'fail', 'error', 'info', 'highlight', 'neutral'])
+        .optional()
+        .describe('Colour signal: pass=green, fail=red, error=amber, info=cyan, highlight=brand, neutral=none'),
+    }))
+    .describe('One or more KPI tiles (about five at most)'),
+});
+export type RenderKpiProps = z.infer<typeof renderKpiSchema>;

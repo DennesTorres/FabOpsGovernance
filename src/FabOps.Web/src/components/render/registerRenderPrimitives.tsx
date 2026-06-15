@@ -5,6 +5,7 @@ import {
   renderChartSchema,
   renderCodeSchema,
   renderDonutSchema,
+  renderKpiSchema,
   renderTableSchema,
 } from './schemas';
 import {
@@ -13,6 +14,7 @@ import {
   RenderChart,
   RenderCode,
   RenderDonut,
+  RenderKpi,
   RenderTable,
 } from './RenderPrimitives';
 
@@ -103,6 +105,19 @@ export function RenderPrimitivesRegistrar() {
       'is written or what it checks, rather than a plain-language summary of it.',
     parameters: renderCodeSchema,
     render: RenderCode,
+  }, []);
+
+  useComponent({
+    name: 'render_kpi',
+    description:
+      'KPI tiles — use to surface headline numbers as visual tiles: a single key metric or a few related ' +
+      'counts (about five at most) where the value itself is the point and colour signals significance ' +
+      '(pass=green, fail=red, error=amber, info=cyan, highlight=brand, neutral=none). Examples: total ' +
+      'items evaluated / passed / failed / errored from a compliance run; the number of rules in the ' +
+      'catalog; a single percentage score. Prefer this over a table when there are only a few numbers and ' +
+      'no per-item breakdown is needed.',
+    parameters: renderKpiSchema,
+    render: RenderKpi,
   }, []);
 
   return null;

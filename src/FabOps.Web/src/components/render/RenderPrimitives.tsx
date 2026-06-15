@@ -4,6 +4,7 @@ import {
   RenderChartProps,
   RenderCodeProps,
   RenderDonutProps,
+  RenderKpiProps,
   RenderTableProps,
   Tone,
 } from './schemas';
@@ -227,6 +228,21 @@ export function RenderCode({ code, language, title }: Partial<RenderCodeProps>) 
         </div>
       )}
       <pre><code>{code ?? ''}</code></pre>
+    </div>
+  );
+}
+
+export function RenderKpi({ items }: Partial<RenderKpiProps>) {
+  const tiles = (items ?? []).filter(t => t && t.value !== undefined);
+  return (
+    <div className="rp rp-kpi">
+      {tiles.map((t, i) => (
+        <div key={i} className={`rp-kpi-tile rp-kpi-${t.tone ?? 'neutral'}`}>
+          <div className="rp-kpi-value">{t.value ?? ''}</div>
+          <div className="rp-kpi-label">{t.label ?? ''}</div>
+          {t.sublabel && <div className="rp-kpi-sublabel">{t.sublabel}</div>}
+        </div>
+      ))}
     </div>
   );
 }

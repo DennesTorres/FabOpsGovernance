@@ -50,7 +50,8 @@
    input textbox span the full width of the space. */
 .chat-page { position: relative; flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .chat-page .chat-area { flex: 1; min-height: 0; }
-.fabops-chat .max-w-3xl { max-width: 100% !important; }
+.fabops-chat .max-w-3xl,
+.fabops-chat .cpk\:max-w-3xl { max-width: 100% !important; }
 
 /* ─── Per-turn identity rows ───────────────────
    Every assistant turn shows the agent avatar + name (the look that used to be a one-off

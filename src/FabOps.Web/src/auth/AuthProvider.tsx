@@ -14,7 +14,10 @@ function buildMsalConfig(cfg: AuthConfig): Configuration {
   return {
     auth: {
       clientId: cfg.clientId,
-      authority: `https://login.microsoftonline.com/${cfg.tenantId}`,
+      // Multi-tenant + personal Microsoft accounts, matching the app registration's
+      // AzureADandPersonalMicrosoftAccount audience. A tenant-specific authority here is what
+      // restricts the sign-in screen to a single tenant — which the registration does not.
+      authority: 'https://login.microsoftonline.com/common',
       redirectUri: window.location.origin,
     },
     cache: { cacheLocation: 'sessionStorage', storeAuthStateInCookie: false },

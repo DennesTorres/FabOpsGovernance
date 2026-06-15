@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Protocols;
@@ -7,25 +8,32 @@ using Microsoft.IdentityModel.Tokens;
 namespace FabOps.Api;
 
 /// <summary>
-/// Validates the Entra bearer token the SPA sends, using the tenant's published signing keys
-/// (fetched and cached from the OIDC metadata endpoint) — no client secret. Accepts tokens
-/// whose audience is the app's client id and whose issuer is the configured tenant.
+/// Validates the Entra bearer token the SPA sends, using Microsoft's published signing keys
+/// (fetched and cached from the OIDC metadata endpoint) — no client secret. Matches the app
+/// registration's multi-tenant + personal-account audience: a token is accepted when its
+/// audience is this app's client id and its issuer is any well-formed Microsoft tenant issuer.
 /// </summary>
 public sealed class EntraTokenValidator
 {
     private readonly EntraOptions _options;
-    private readonly string? _issuer;
     private readonly ConfigurationManager<OpenIdConnectConfiguration>? _configManager;
     private readonly JsonWebTokenHandler _handler = new();
+
+    // v2.0 (login.microsoftonline.com/{tenant}/v2.0) and v1.0 (sts.windows.net/{tenant}/) issuer
+    // templates, accepted for ANY tenant GUID — including the 9188040d… "personal accounts" tenant.
+    private static readonly Regex MicrosoftIssuer = new(
+        @"^https://(login\.microsoftonline\.com/[0-9a-fA-F-]{36}/v2\.0|sts\.windows\.net/[0-9a-fA-F-]{36}/)$",
+        RegexOptions.Compiled);
 
     public EntraTokenValidator(IOptions<EntraOptions> options)
     {
         _options = options.Value;
-        if (!string.IsNullOrWhiteSpace(_options.TenantId))
+        if (!string.IsNullOrWhiteSpace(_options.ClientId))
         {
-            _issuer = $"https://login.microsoftonline.com/{_options.TenantId}/v2.0";
+            // "common" metadata serves the signing keys for every tenant and for personal
+            // accounts, so tokens from any of them verify; the issuer is checked per-token below.
             _configManager = new ConfigurationManager<OpenIdConnectConfiguration>(
-                $"{_issuer}/.well-known/openid-configuration",
+                "https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration",
                 new OpenIdConnectConfigurationRetriever());
         }
     }
@@ -49,9 +57,11 @@ public sealed class EntraTokenValidator
             OpenIdConnectConfiguration config = await _configManager.GetConfigurationAsync(cancellationToken).ConfigureAwait(false);
             TokenValidationResult result = await _handler.ValidateTokenAsync(token, new TokenValidationParameters
             {
-                // Accept both the v2.0 issuer (MSAL.js default) and the v1.0 issuer, so whichever
-                // token version the SPA obtains validates.
-                ValidIssuers = [_issuer!, $"https://sts.windows.net/{_options.TenantId}/"],
+                // Accept any Microsoft tenant issuer (multi-tenant + personal accounts); the real
+                // gate is the audience below — the token must be issued for THIS app's client id.
+                IssuerValidator = (issuer, _, _) => MicrosoftIssuer.IsMatch(issuer)
+                    ? issuer
+                    : throw new SecurityTokenInvalidIssuerException($"Untrusted issuer '{issuer}'."),
                 ValidAudiences = [_options.ClientId!, $"api://{_options.ClientId}"],
                 IssuerSigningKeys = config.SigningKeys,
                 ValidateIssuer = true,

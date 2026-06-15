@@ -165,6 +165,23 @@
   border-radius: 4px; padding: 1px 5px; font-size: 12.5px; color: var(--primary-light);
 }
 
+/* ─── KPI tiles (render_kpi) ─── */
+.rp-kpi { display: flex; flex-wrap: wrap; gap: 12px; margin: 10px 0; }
+.rp-kpi-tile {
+  flex: 1 1 130px; min-width: 120px;
+  padding: 14px 16px; border-radius: var(--radius-lg);
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-top: 3px solid var(--border-bright);
+}
+.rp-kpi-value { font-size: 26px; font-weight: 800; line-height: 1.1; color: var(--text-head); }
+.rp-kpi-label { margin-top: 4px; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted-light); }
+.rp-kpi-sublabel { margin-top: 4px; font-size: 12px; color: var(--text); }
+.rp-kpi-pass      { border-top-color: var(--success); } .rp-kpi-pass .rp-kpi-value      { color: var(--success); }
+.rp-kpi-fail      { border-top-color: var(--error); }   .rp-kpi-fail .rp-kpi-value      { color: var(--error); }
+.rp-kpi-error     { border-top-color: var(--warning); } .rp-kpi-error .rp-kpi-value     { color: var(--warning); }
+.rp-kpi-info      { border-top-color: var(--accent); }  .rp-kpi-info .rp-kpi-value      { color: var(--accent); }
+.rp-kpi-highlight { border-top-color: var(--primary); } .rp-kpi-highlight .rp-kpi-value { color: var(--primary-light); }
+
 /* ─── Centered starter questions over an empty conversation ─── */
 .starter {
   position: absolute; inset: 0; z-index: 5;

@@ -292,6 +292,13 @@
 .rp-table td { color: var(--text-bright); }
 .rp-footnote { margin-top: 6px; font-size: 12px; color: var(--muted-light); }
 
+/* ─── Breathing room below tables so the next line isn't crammed against them ───
+   Covers both render paths: the render_table tool (.rp-table) and a Streamdown
+   Markdown table (its scroll wrapper — the div directly holding a <table>; :not(.rp)
+   keeps this from also hitting render_table's own wrapper and doubling the gap). */
+.fabops-chat .rp-table { margin-bottom: 24px !important; }
+.fabops-chat .msg-col div:has(> table):not(.rp) { margin-bottom: 24px !important; }
+
 /* Donut */
 .rp-donut-body { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
 .rp-donut-chart { position: relative; width: 120px; height: 120px; }

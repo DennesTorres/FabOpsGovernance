@@ -34,7 +34,7 @@ export default function ChatPage() {
   // "Clear conversation" starts a fresh AG-UI thread, like the reference UI did.
   const [threadId, setThreadId] = useState(() => crypto.randomUUID());
   const [chatError, setChatError] = useState<string | null>(null);
-  const [showNotice, setShowNotice] = useState(true);
+  const [showNotice, setShowNotice] = useState(false);
 
   useEffect(() => {
     fetch(apiUrl('/api/config'))
@@ -88,18 +88,25 @@ export default function ChatPage() {
         <ToolActivityRegistrar />
         <SampleQuestions agentId={AGENT_ID} />
         <div className="chat-area">
-          {showNotice && (
-            <div className="env-notice">
-              <span className="env-notice-icon" aria-hidden="true">ⓘ</span>
-              <span className="env-notice-text">
+          <div className="env-notice-wrap">
+            <button
+              type="button"
+              className="env-notice-btn"
+              aria-label="About this environment"
+              title="About this environment"
+              aria-expanded={showNotice}
+              onClick={() => setShowNotice((o) => !o)}
+            >?</button>
+            {showNotice && (
+              <div className="env-notice-pop" role="dialog">
+                <button type="button" className="env-notice-pop-close" onClick={() => setShowNotice(false)} aria-label="Close">✕</button>
                 <strong>Test environment.</strong> This assistant runs against a sample Microsoft
                 Fabric tenant for demonstration only. In production, FabOps is set up against your
                 enterprise's own Fabric environment for accurate results. Support for additional
                 models is planned.
-              </span>
-              <button className="env-notice-close" onClick={() => setShowNotice(false)} aria-label="Dismiss notice">✕</button>
-            </div>
-          )}
+              </div>
+            )}
+          </div>
           {chatError && (
             <div className="msg-error" style={{ margin: '8px 0' }}>{chatError}</div>
           )}

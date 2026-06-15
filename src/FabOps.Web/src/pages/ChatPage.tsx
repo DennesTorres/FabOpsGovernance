@@ -4,7 +4,8 @@ import { CopilotChat, CopilotKitProvider, useRenderTool } from '@copilotkit/reac
 import { useAuth } from '../auth/AuthProvider';
 import { apiUrl } from '../config';
 import { RenderPrimitivesRegistrar } from '../components/render/registerRenderPrimitives';
-import AgentAvatar from '../components/AgentAvatar';
+import { FabOpsAssistantMessage, FabOpsUserMessage } from '../components/ChatMessages';
+import { SampleQuestions } from '../components/SampleQuestions';
 
 const AGENT_ID = 'default';
 
@@ -84,14 +85,8 @@ export default function ChatPage() {
       >
         <RenderPrimitivesRegistrar />
         <ToolActivityRegistrar />
+        <SampleQuestions agentId={AGENT_ID} />
         <div className="chat-area">
-          <div className="chat-agent-header">
-            <span className="chat-agent-avatar"><AgentAvatar size={40} /></span>
-            <span className="chat-agent-meta">
-              <span className="chat-agent-name">FabOps Copilot</span>
-              <span className="chat-agent-sub">Your Microsoft Fabric governance assistant</span>
-            </span>
-          </div>
           {chatError && (
             <div className="msg-error" style={{ margin: '8px 0' }}>{chatError}</div>
           )}
@@ -99,12 +94,16 @@ export default function ChatPage() {
             agentId={AGENT_ID}
             threadId={threadId}
             className="fabops-chat dark"
+            messageView={{
+              assistantMessage: FabOpsAssistantMessage,
+              userMessage: FabOpsUserMessage,
+            }}
             labels={{
               chatInputPlaceholder: ready
                 ? 'Describe a rule or ask about your Fabric governance…'
                 : 'Checking agent configuration…',
               welcomeMessageText:
-                'Try: "every lakehouse in production must be assigned to a capacity" — or ask FabOps Copilot to list existing rules.',
+                'Ask about your Microsoft Fabric governance — or pick one of the sample questions to get started.',
               chatDisclaimerText: '',
             }}
           />

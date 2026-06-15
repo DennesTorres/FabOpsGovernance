@@ -109,10 +109,30 @@ public sealed class AguiEventWriter(HttpResponse response)
     public Task ToolEndAsync(string toolCallId, CancellationToken ct) =>
         WriteAsync(new { type = "TOOL_CALL_END", toolCallId }, ct);
 
+    private readonly SemaphoreSlim _writeLock = new(1, 1);
+    private static readonly byte[] KeepAlive = Encoding.UTF8.GetBytes(": keep-alive\n\n");
+
+    /// <summary>Writes an SSE keep-alive comment so a slow agent run doesn't idle out the connection.</summary>
+    public async Task KeepAliveAsync(CancellationToken ct)
+    {
+        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            await response.Body.WriteAsync(KeepAlive, ct).ConfigureAwait(false);
+            await response.Body.FlushAsync(ct).ConfigureAwait(false);
+        }
+        finally { _writeLock.Release(); }
+    }
+
     private async Task WriteAsync(object evt, CancellationToken ct)
     {
-        string payload = $"data: {JsonSerializer.Serialize(evt, Json)}\n\n";
-        await response.Body.WriteAsync(Encoding.UTF8.GetBytes(payload), ct).ConfigureAwait(false);
-        await response.Body.FlushAsync(ct).ConfigureAwait(false);
+        byte[] payload = Encoding.UTF8.GetBytes($"data: {JsonSerializer.Serialize(evt, Json)}\n\n");
+        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            await response.Body.WriteAsync(payload, ct).ConfigureAwait(false);
+            await response.Body.FlushAsync(ct).ConfigureAwait(false);
+        }
+        finally { _writeLock.Release(); }
     }
 }

@@ -74,6 +74,11 @@ public sealed class AgentFunction(
         writer.PrepareResponse();
         await writer.RunStartedAsync(threadId, runId, ct).ConfigureAwait(false);
 
+        // Keep the SSE connection alive while the agent works. Slow runs otherwise go silent and
+        // the load balancer / proxy drops the idle connection, surfacing as a browser "network error".
+        using var heartbeatCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+        Task heartbeat = HeartbeatAsync(writer, heartbeatCts.Token);
+
         try
         {
             // Managed identity provides the bearer token; no secret is stored and no OAuth flow
@@ -129,6 +134,25 @@ public sealed class AgentFunction(
                 // The connection is gone; let it close.
             }
         }
+        finally
+        {
+            heartbeatCts.Cancel();
+            try { await heartbeat.ConfigureAwait(false); } catch { /* heartbeat teardown */ }
+        }
+    }
+
+    private static async Task HeartbeatAsync(AguiEventWriter writer, CancellationToken ct)
+    {
+        try
+        {
+            while (!ct.IsCancellationRequested)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(15), ct).ConfigureAwait(false);
+                await writer.KeepAliveAsync(ct).ConfigureAwait(false);
+            }
+        }
+        catch (OperationCanceledException) { }
+        catch { /* connection problems — the main path reports errors */ }
     }
 
     private static async Task<string> SafeReadAsync(HttpResponseMessage upstream, CancellationToken ct)

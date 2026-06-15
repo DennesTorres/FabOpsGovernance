@@ -103,8 +103,7 @@ export default function ChatPage() {
               chatInputPlaceholder: ready
                 ? 'Describe a rule or ask about your Fabric governance…'
                 : 'Checking agent configuration…',
-              welcomeMessageText:
-                'Ask about your Microsoft Fabric governance — or pick one of the sample questions to get started.',
+              welcomeMessageText: '',
               chatDisclaimerText: '',
             }}
           />

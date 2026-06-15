@@ -119,6 +119,33 @@
   35% { opacity: 1; transform: translateY(-3px); }
 }
 
+/* ─── User turn as a full-width horizontal card (distinct from the plain agent turn) ─── */
+.fabops-chat .msg-row-user {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+}
+.fabops-chat .user-content { color: var(--text-bright); font-size: 14px; white-space: pre-wrap; word-break: break-word; }
+
+/* ─── Centered starter questions over an empty conversation ─── */
+.starter {
+  position: absolute; inset: 0; z-index: 5;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none; padding: 24px;
+}
+.starter-inner { width: 100%; max-width: 760px; text-align: center; }
+.starter-title { font-size: 15px; font-weight: 700; color: var(--text-head); letter-spacing: .02em; margin-bottom: 16px; }
+.starter-grid { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+.starter-card {
+  pointer-events: auto; flex: 0 1 230px;
+  padding: 16px; border-radius: var(--radius-lg);
+  border: 1px solid var(--border); background: var(--bg-card); color: var(--text-bright);
+  font-size: 13px; text-align: left; cursor: pointer;
+  transition: border-color .15s, background .15s, transform .1s;
+}
+.starter-card:hover { border-color: var(--primary); background: var(--primary-subtle); color: var(--text-head); transform: translateY(-1px); }
+
 /* ─── Backend tool activity (the reference UI's "Calling tool" bubbles) ─── */
 .tool-activity {
   display: inline-flex;

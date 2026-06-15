@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { useAgent, useConfigureSuggestions } from '@copilotkit/react-core/v2';
+import { useAgent } from '@copilotkit/react-core/v2';
 
-/** Sample questions offered to the user — shown in the middle when the chat is empty, and always
- *  reachable from the side drawer. */
+/** Starter questions offered to the user. */
 const QUESTIONS = [
   'How many rules are there?',
   'Could you list the rules?',
@@ -10,22 +9,15 @@ const QUESTIONS = [
 ];
 
 /**
- * Two ways to reach the same starter questions:
- *  - Middle of the chat: native CopilotKit static suggestions, which render on the empty/welcome
- *    screen and disappear automatically once the conversation starts.
- *  - A side drawer (closed by default, toggled by a button) so the questions stay reachable after
- *    the chat has started.
+ * Starter questions, offered two ways:
+ *  - Centered over the empty conversation; they disappear once the chat has any messages.
+ *  - A side drawer (closed by default, toggled by a button) that stays reachable afterwards.
  * Clicking a question in either place sends it as a user turn and runs the agent.
  */
 export function SampleQuestions({ agentId }: { agentId: string }) {
   const { agent } = useAgent({ agentId });
   const [open, setOpen] = useState(false);
-
-  // Middle suggestions — static config shows them only while messageCount === 0.
-  useConfigureSuggestions(
-    { suggestions: QUESTIONS.map((q) => ({ title: q, message: q })) },
-    [],
-  );
+  const empty = (agent.messages?.length ?? 0) === 0;
 
   const ask = (question: string) => {
     if (agent.isRunning) return;
@@ -36,6 +28,21 @@ export function SampleQuestions({ agentId }: { agentId: string }) {
 
   return (
     <>
+      {empty && (
+        <div className="starter">
+          <div className="starter-inner">
+            <div className="starter-title">Try a sample question</div>
+            <div className="starter-grid">
+              {QUESTIONS.map((q) => (
+                <button key={q} type="button" className="starter-card" onClick={() => ask(q)}>
+                  {q}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       <button
         type="button"
         className="examples-toggle"

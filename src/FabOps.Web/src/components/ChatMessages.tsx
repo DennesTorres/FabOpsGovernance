@@ -32,15 +32,18 @@ export const FabOpsAssistantMessage = Object.assign(
 );
 
 export const FabOpsUserMessage = Object.assign(
-  (props: CopilotChatUserMessageProps) => (
-    <div className="msg-row msg-row-user">
-      <span className="msg-avatar"><UserAvatar size={34} /></span>
-      <div className="msg-col">
-        <span className="msg-author">You</span>
-        <CopilotChatUserMessage {...props} />
+  (props: CopilotChatUserMessageProps) => {
+    const content = typeof props.message?.content === 'string' ? props.message.content : '';
+    return (
+      <div className="msg-row msg-row-user">
+        <span className="msg-avatar"><UserAvatar size={34} /></span>
+        <div className="msg-col">
+          <span className="msg-author">You</span>
+          <div className="user-content">{content}</div>
+        </div>
       </div>
-    </div>
-  ),
+    );
+  },
   CopilotChatUserMessage,
 );
 

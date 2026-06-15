@@ -1,30 +1,27 @@
-/** A friendly support-agent avatar (original SVG) used to give the FabOps agent a face. */
+/** A friendly sun avatar (original SVG) used to give the Malta Beaches guide a face. */
 export default function AgentAvatar({ size = 40 }: { size?: number }) {
   return (
-    <svg viewBox="0 0 64 64" width={size} height={size} role="img" aria-label="FabOps Copilot">
+    <svg viewBox="0 0 64 64" width={size} height={size} role="img" aria-label="Malta Beaches guide">
       <defs>
         <linearGradient id="agent-av" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#6366f1" />
-          <stop offset="1" stopColor="#22d3ee" />
+          <stop stopColor="#22d3ee" />
+          <stop offset="1" stopColor="#0891b2" />
         </linearGradient>
       </defs>
+      {/* sky/sea disc */}
       <circle cx="32" cy="32" r="32" fill="url(#agent-av)" />
-      {/* shoulders */}
-      <path d="M15 53c0-9 8-14 17-14s17 5 17 14" fill="#eef2ff" />
-      {/* head */}
-      <circle cx="32" cy="26" r="12" fill="#f8fafc" />
-      {/* eyes */}
-      <circle cx="27.5" cy="25" r="1.8" fill="#1a2845" />
-      <circle cx="36.5" cy="25" r="1.8" fill="#1a2845" />
-      {/* smile */}
-      <path d="M27 29.5c1.6 2.2 8.4 2.2 10 0" stroke="#1a2845" strokeWidth="2" fill="none" strokeLinecap="round" />
-      {/* headset band + ear pads */}
-      <path d="M20 26a12 12 0 0 1 24 0" stroke="#6366f1" strokeWidth="2.6" fill="none" strokeLinecap="round" />
-      <rect x="17.5" y="25" width="5" height="8" rx="2.5" fill="#6366f1" />
-      <rect x="41.5" y="25" width="5" height="8" rx="2.5" fill="#6366f1" />
-      {/* mic boom */}
-      <path d="M44 31c2.5 4.5-1 8.5-5 9" stroke="#6366f1" strokeWidth="2.2" fill="none" strokeLinecap="round" />
-      <circle cx="38" cy="40.5" r="1.9" fill="#22d3ee" />
+      {/* sun */}
+      <circle cx="32" cy="27" r="11" fill="#fde68a" />
+      <circle cx="32" cy="27" r="11" fill="none" stroke="#f59e0b" strokeWidth="2" />
+      {/* friendly face */}
+      <circle cx="28" cy="26" r="1.6" fill="#92400e" />
+      <circle cx="36" cy="26" r="1.6" fill="#92400e" />
+      <path d="M28 30c1.4 1.6 6.6 1.6 8 0" stroke="#92400e" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+      {/* waves */}
+      <path d="M10 46c3 0 3 2.4 6 2.4s3-2.4 6-2.4 3 2.4 6 2.4 3-2.4 6-2.4 3 2.4 6 2.4 3-2.4 6-2.4"
+        stroke="#eff9ff" strokeWidth="2.4" fill="none" strokeLinecap="round" />
+      <path d="M10 53c3 0 3 2.4 6 2.4s3-2.4 6-2.4 3 2.4 6 2.4 3-2.4 6-2.4 3 2.4 6 2.4 3-2.4 6-2.4"
+        stroke="#eff9ff" strokeWidth="2.4" fill="none" strokeLinecap="round" opacity=".7" />
     </svg>
   );
 }

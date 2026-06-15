@@ -13,7 +13,7 @@ function AppShell() {
       <div className="loading-screen">
         <div className="loading-brand">
           <HexLogo id="load-logo" size={48} />
-          <span>FabOps</span>
+          <span>Malta Beaches</span>
         </div>
         <div className="loading-spinner" />
       </div>
@@ -28,7 +28,7 @@ function AppShell() {
       <header className="header">
         <div className="header-left">
           <HexLogo id="app-logo" size={28} />
-          <span className="header-brand">FabOps</span>
+          <span className="header-brand">Malta Beaches</span>
         </div>
 
         <nav className="header-nav">

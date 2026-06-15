@@ -9,34 +9,35 @@
 
 /* ─── Design tokens ─────────────────────────── */
 :root {
-  --bg:            #080d1a;
-  --bg-surface:    #0e1629;
-  --bg-card:       #131f35;
-  --bg-elevated:   #1a2845;
+  /* Malta beaches — light theme: sea, sand and sun. */
+  --bg:            #eef7fb;   /* light sky */
+  --bg-surface:    #f6fbfe;
+  --bg-card:       #ffffff;
+  --bg-elevated:   #e2f1f8;
 
-  --border:        #1e3052;
-  --border-bright: #2d4a7a;
+  --border:        #cde2ee;
+  --border-bright: #a9d0e2;
 
-  --primary:       #6366f1;
-  --primary-dark:  #4f46e5;
-  --primary-light: #818cf8;
-  --primary-glow:  rgba(99, 102, 241, 0.18);
-  --primary-subtle:rgba(99, 102, 241, 0.07);
+  --primary:       #0891b2;   /* sea — cyan-600 */
+  --primary-dark:  #0e7490;
+  --primary-light: #06b6d4;
+  --primary-glow:  rgba(8, 145, 178, 0.18);
+  --primary-subtle:rgba(8, 145, 178, 0.08);
 
-  --accent:        #22d3ee;
-  --accent-glow:   rgba(34, 211, 238, 0.10);
+  --accent:        #f59e0b;   /* sun — amber */
+  --accent-glow:   rgba(245, 158, 11, 0.14);
 
-  --success:       #10b981;
-  --success-bg:    rgba(16, 185, 129, 0.12);
-  --error:         #f87171;
-  --error-bg:      rgba(248, 113, 113, 0.10);
-  --warning:       #fbbf24;
+  --success:       #0f9d6b;
+  --success-bg:    rgba(15, 157, 107, 0.14);
+  --error:         #ef4444;
+  --error-bg:      rgba(239, 68, 68, 0.10);
+  --warning:       #f59e0b;
 
-  --text:          #c8d3e0;
-  --text-bright:   #f1f5f9;
-  --text-head:     #f8fafc;
-  --muted:         #3d5272;
-  --muted-light:   #5e7ea6;
+  --text:          #2b4256;   /* deep sea-slate */
+  --text-bright:   #112637;
+  --text-head:     #0a1b29;
+  --muted:         #9bb6c8;
+  --muted-light:   #5e7c93;
 
   --radius:        8px;
   --radius-lg:     12px;

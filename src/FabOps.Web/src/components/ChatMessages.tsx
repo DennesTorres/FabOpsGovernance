@@ -23,7 +23,7 @@ export const FabOpsAssistantMessage = Object.assign(
     <div className="msg-row msg-row-agent">
       <span className="msg-avatar"><AgentAvatar size={34} /></span>
       <div className="msg-col">
-        <span className="msg-author">FabOps Copilot</span>
+        <span className="msg-author">Beaches Guide</span>
         <CopilotChatAssistantMessage {...props} />
       </div>
     </div>

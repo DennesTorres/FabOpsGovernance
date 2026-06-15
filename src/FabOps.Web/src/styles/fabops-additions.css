@@ -12,7 +12,7 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 /*
@@ -24,25 +24,25 @@
  */
 .fabops-chat[data-copilotkit],
 .fabops-chat [data-copilotkit] {
-  --background: #0b1322;            /* chat surface, just above the page bg */
-  --foreground: #f1f5f9;
-  --card: #131f35;
-  --card-foreground: #f1f5f9;
-  --popover: #131f35;
-  --popover-foreground: #f1f5f9;
-  --primary: #6366f1;              /* indigo — user bubble & primary accents */
+  --background: #ffffff;           /* chat surface */
+  --foreground: #112637;
+  --card: #f6fbfe;
+  --card-foreground: #112637;
+  --popover: #ffffff;
+  --popover-foreground: #112637;
+  --primary: #0891b2;             /* sea — user bubble & primary accents */
   --primary-foreground: #ffffff;
-  --secondary: #1a2845;
-  --secondary-foreground: #f1f5f9;
-  --muted: #1a2845;
-  --muted-foreground: #8aa0c0;
-  --accent: #1a2845;
-  --accent-foreground: #f1f5f9;
-  --destructive: #f87171;
+  --secondary: #e2f1f8;
+  --secondary-foreground: #112637;
+  --muted: #e2f1f8;
+  --muted-foreground: #5e7c93;
+  --accent: #e2f1f8;
+  --accent-foreground: #112637;
+  --destructive: #ef4444;
   --destructive-foreground: #ffffff;
-  --border: #24365c;
-  --input: #24365c;
-  --ring: #6366f1;
+  --border: #cde2ee;
+  --input: #cde2ee;
+  --ring: #0891b2;
   --radius: 12px;
 }
 

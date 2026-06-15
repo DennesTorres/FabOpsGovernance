@@ -3,9 +3,9 @@ import { useAgent } from '@copilotkit/react-core/v2';
 
 /** Starter questions offered to the user. */
 const QUESTIONS = [
-  'How many rules are there?',
-  'Could you list the rules?',
-  'How many executions are there?',
+  "What's the best beaches today?",
+  'What hidden secrets would you recommend today?',
+  'What accessible beaches are good today?',
 ];
 
 /**

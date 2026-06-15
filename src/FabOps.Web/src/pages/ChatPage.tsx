@@ -93,7 +93,7 @@ export default function ChatPage() {
           <CopilotChat
             agentId={AGENT_ID}
             threadId={threadId}
-            className="fabops-chat dark"
+            className="fabops-chat"
             messageView={{
               assistantMessage: FabOpsAssistantMessage,
               userMessage: FabOpsUserMessage,
@@ -101,8 +101,8 @@ export default function ChatPage() {
             }}
             labels={{
               chatInputPlaceholder: ready
-                ? 'Describe a rule or ask about your Fabric governance…'
-                : 'Checking agent configuration…',
+                ? "Ask about Malta's beaches, conditions, or accessibility today…"
+                : 'Checking…',
               welcomeMessageText: '',
               chatDisclaimerText: '',
             }}

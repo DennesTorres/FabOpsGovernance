@@ -51,25 +51,25 @@ export default function LandingPage() {
           <div className="hero-copy">
             <div className="brand">
               <HexLogo id="hero-logo" size={40} />
-              <span className="brand-name">FabOps</span>
+              <span className="brand-name">Malta Beaches</span>
             </div>
 
             <h1 className="hero-headline">
-              Governance that<br />speaks{' '}
-              <span className="hero-hl-accent">your language.</span><br />
-              And enforces it.
+              Malta's beaches,<br />
+              matched to{' '}
+              <span className="hero-hl-accent">today.</span>
             </h1>
 
             <p className="hero-sub">
-              Describe a rule in plain English. FabOps Copilot compiles it into FRL —
-              a versioned, immutable governance rule language — then agents evaluate it
-              against every item in your Microsoft Fabric tenant, pass or fail, with evidence.
+              Tell our guide what you're after. It reads today's weather, wind and sea
+              conditions across the Maltese coast — and points you to the best beach for
+              quality, calm water, and accessibility, right now.
             </p>
 
             <div className="hero-pills">
-              <span className="hero-pill">Gemini on Vertex AI</span>
-              <span className="hero-pill">Elastic hybrid search</span>
-              <span className="hero-pill">Microsoft Fabric API</span>
+              <span className="hero-pill">Live weather &amp; wind</span>
+              <span className="hero-pill">Sea state &amp; quality</span>
+              <span className="hero-pill">Step-free access</span>
             </div>
 
             {stage === 'hero' && (
@@ -82,29 +82,25 @@ export default function LandingPage() {
             )}
           </div>
 
-          {/* Right: FRL demo card */}
+          {/* Right: beach-of-the-day demo card */}
           <div className="hero-demo" aria-hidden>
             <div className="demo-card">
               <div className="demo-card-hdr">
-                <span className="demo-badge">FRL</span>
-                <span className="demo-filename">lakehouse-capacity.frl</span>
+                <span className="demo-badge">TODAY</span>
+                <span className="demo-filename">Golden Bay</span>
                 <span className="demo-dots"><span /><span /><span /></span>
               </div>
-              <pre className="demo-code">{`rule LakehouseCapacityRequired {
-  scope: workspace.items
-    where type = "Lakehouse"
-      and workspace.tier = "Production"
+              <pre className="demo-code">{`Sea            calm · 26°C
+Wind           NW 8 kn · sheltered
+Crowd          moderate
+Access         ramp + assisted entry
 
-  check: item.capacity != null
-
-  message: "Production lakehouses
-    must have a capacity assigned"
-}`}</pre>
+Best for       families & easy swimming`}</pre>
             </div>
             <div className="demo-results">
-              <div className="demo-result pass"><span className="res-dot" /><span className="res-name">LH_Sales_Prod</span><span className="res-status">PASS</span></div>
-              <div className="demo-result pass"><span className="res-dot" /><span className="res-name">LH_Finance_Q4</span><span className="res-status">PASS</span></div>
-              <div className="demo-result fail"><span className="res-dot" /><span className="res-name">LH_Marketing_New</span><span className="res-status">FAIL</span></div>
+              <div className="demo-result pass"><span className="res-dot" /><span className="res-name">Golden Bay</span><span className="res-status">GREAT</span></div>
+              <div className="demo-result pass"><span className="res-dot" /><span className="res-name">Għajn Tuffieħa</span><span className="res-status">GOOD</span></div>
+              <div className="demo-result fail"><span className="res-dot" /><span className="res-name">Sliema front</span><span className="res-status">WINDY</span></div>
             </div>
           </div>
         </div>
@@ -114,7 +110,7 @@ export default function LandingPage() {
       {(stage === 'config' || stage === 'signing-in') && (
         <section className="auth-section" ref={configRef}>
           <div className="auth-card">
-            <h2 className="auth-card-title">Sign in to FabOps</h2>
+            <h2 className="auth-card-title">Sign in to Malta Beaches</h2>
             <p className="auth-card-sub">
               {!cfg && !loadError ? 'Loading configuration…' : 'Authenticate with your Microsoft account'}
             </p>
@@ -138,39 +134,40 @@ export default function LandingPage() {
       <section className="features">
         <div className="features-inner">
           <div className="features-hdr">
-            <h2>How FabOps works</h2>
-            <p>Stop documenting governance. Start operating it.</p>
+            <h2>How it works</h2>
+            <p>Your perfect Malta beach, picked for today's weather.</p>
           </div>
           <div className="features-grid">
             <div className="feature-card">
               <div className="feature-num">01</div>
               <div className="feature-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="22" height="22">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
                 </svg>
               </div>
-              <h3>Define in plain English</h3>
-              <p>Describe a governance rule naturally. FabOps Copilot reconciles your intent with Fabric terminology, prevents duplicates, and compiles it to FRL — versioned and immutable.</p>
+              <h3>Ask in plain language</h3>
+              <p>Tell the guide what you want — calm water, family-friendly, quiet, accessible, or a hidden gem off the beaten track.</p>
             </div>
             <div className="feature-card">
               <div className="feature-num">02</div>
               <div className="feature-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="22" height="22">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z" />
                 </svg>
               </div>
-              <h3>Evaluate against your tenant</h3>
-              <p>Agents evaluate your rules against your live Microsoft Fabric tenant — workspaces, items, capacities — through the Fabric API, inspecting the real state of your environment to decide pass or fail.</p>
+              <h3>Reads today's conditions</h3>
+              <p>It checks live weather, wind direction and sea state along the coast to see which beaches are at their best right now.</p>
             </div>
             <div className="feature-card">
               <div className="feature-num">03</div>
               <div className="feature-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="22" height="22">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                 </svg>
               </div>
-              <h3>Enforce with evidence</h3>
-              <p>Every evaluation produces pass/fail with evidence. Every rule is versioned and auditable. Elastic hybrid search understands rule semantics so your rulebook stays clean as it grows.</p>
+              <h3>Recommends the best spot</h3>
+              <p>You get today's top beaches for your needs, with notes on water quality, crowds and step-free access.</p>
             </div>
           </div>
         </div>
@@ -179,9 +176,9 @@ export default function LandingPage() {
       <footer className="landing-footer">
         <div className="landing-footer-brand">
           <HexLogo id="footer-logo" size={24} />
-          <span>FabOps</span>
+          <span>Malta Beaches</span>
         </div>
-        <span className="landing-footer-tagline">Your rules, running.</span>
+        <span className="landing-footer-tagline">Find your perfect beach.</span>
       </footer>
     </div>
   );

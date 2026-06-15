@@ -82,25 +82,21 @@ export default function LandingPage() {
             )}
           </div>
 
-          {/* Right: beach-of-the-day demo card */}
-          <div className="hero-demo" aria-hidden>
-            <div className="demo-card">
-              <div className="demo-card-hdr">
-                <span className="demo-badge">TODAY</span>
-                <span className="demo-filename">Golden Bay</span>
-                <span className="demo-dots"><span /><span /><span /></span>
-              </div>
-              <pre className="demo-code">{`Sea            calm · 26°C
-Wind           NW 8 kn · sheltered
-Crowd          moderate
-Access         ramp + assisted entry
-
-Best for       families & easy swimming`}</pre>
-            </div>
-            <div className="demo-results">
-              <div className="demo-result pass"><span className="res-dot" /><span className="res-name">Golden Bay</span><span className="res-status">GREAT</span></div>
-              <div className="demo-result pass"><span className="res-dot" /><span className="res-name">Għajn Tuffieħa</span><span className="res-status">GOOD</span></div>
-              <div className="demo-result fail"><span className="res-dot" /><span className="res-name">Sliema front</span><span className="res-status">WINDY</span></div>
+          {/* Right: Malta beach gallery */}
+          <div className="hero-demo">
+            <figure className="beach-hero">
+              <img src="/beaches/golden-bay.jpg" alt="Golden Bay beach, Mellieħa, Malta" loading="lazy" />
+              <figcaption>Golden Bay</figcaption>
+            </figure>
+            <div className="beach-thumbs">
+              <figure className="beach-thumb">
+                <img src="/beaches/blue-water.jpg" alt="Clear blue water at a Maltese beach" loading="lazy" />
+                <figcaption>Crystal water</figcaption>
+              </figure>
+              <figure className="beach-thumb">
+                <img src="/beaches/armier-bay.jpg" alt="Armier Bay, Malta" loading="lazy" />
+                <figcaption>Armier Bay</figcaption>
+              </figure>
             </div>
           </div>
         </div>

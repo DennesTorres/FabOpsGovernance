@@ -182,6 +182,18 @@
 .rp-kpi-info      { border-top-color: var(--accent); }  .rp-kpi-info .rp-kpi-value      { color: var(--accent); }
 .rp-kpi-highlight { border-top-color: var(--primary); } .rp-kpi-highlight .rp-kpi-value { color: var(--primary-light); }
 
+/* ─── Malta beach gallery (landing hero, app/malta-tourism) ─── */
+.beach-hero { margin: 0; position: relative; border-radius: var(--radius-xl); overflow: hidden; box-shadow: 0 16px 48px rgba(15, 40, 60, .18); }
+.beach-hero img { display: block; width: 100%; height: 280px; object-fit: cover; }
+.beach-thumbs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+.beach-thumb { margin: 0; position: relative; border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 8px 24px rgba(15, 40, 60, .14); }
+.beach-thumb img { display: block; width: 100%; height: 120px; object-fit: cover; }
+.beach-hero figcaption, .beach-thumb figcaption {
+  position: absolute; left: 10px; bottom: 8px;
+  background: rgba(10, 27, 41, .55); color: #fff;
+  font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+}
+
 /* ─── Centered starter questions over an empty conversation ─── */
 .starter {
   position: absolute; inset: 0; z-index: 5;

@@ -4,7 +4,7 @@ import { CopilotChat, CopilotKitProvider, useRenderTool } from '@copilotkit/reac
 import { useAuth } from '../auth/AuthProvider';
 import { apiUrl } from '../config';
 import { RenderPrimitivesRegistrar } from '../components/render/registerRenderPrimitives';
-import { FabOpsAssistantMessage, FabOpsUserMessage } from '../components/ChatMessages';
+import { FabOpsAssistantMessage, FabOpsUserMessage, ThinkingCursor } from '../components/ChatMessages';
 import { SampleQuestions } from '../components/SampleQuestions';
 
 const AGENT_ID = 'default';
@@ -97,6 +97,7 @@ export default function ChatPage() {
             messageView={{
               assistantMessage: FabOpsAssistantMessage,
               userMessage: FabOpsUserMessage,
+              cursor: ThinkingCursor,
             }}
             labels={{
               chatInputPlaceholder: ready

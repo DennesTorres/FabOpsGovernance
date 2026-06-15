@@ -1,3 +1,4 @@
+import { type HTMLAttributes } from 'react';
 import {
   CopilotChatAssistantMessage,
   CopilotChatUserMessage,
@@ -42,3 +43,16 @@ export const FabOpsUserMessage = Object.assign(
   ),
   CopilotChatUserMessage,
 );
+
+/**
+ * The "thinking" indicator shown while the agent is producing a response (the CopilotChat
+ * `cursor` slot). Replaces the default cursor with an italic "Thinking…" bubble + animated dots.
+ */
+export function ThinkingCursor({ className: _ignored, ...rest }: HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div {...rest} className="msg-thinking" role="status" aria-live="polite">
+      <span className="msg-thinking-text">Thinking…</span>
+      <span className="msg-thinking-dots" aria-hidden="true"><i /><i /><i /></span>
+    </div>
+  );
+}

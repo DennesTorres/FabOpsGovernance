@@ -1,0 +1,86 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" xmlns="http://www.w3.org/2000/svg" font-family="DejaVu Sans, Segoe UI, sans-serif">
+  <defs>
+    <radialGradient id="g1" cx="78%" cy="-8%" r="60%">
+      <stop offset="0%" stop-color="#34d2c0" stop-opacity="0.20"/>
+      <stop offset="60%" stop-color="#34d2c0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="8%" cy="115%" r="55%">
+      <stop offset="0%" stop-color="#6d8bff" stop-opacity="0.20"/>
+      <stop offset="55%" stop-color="#6d8bff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0 H0 V48" fill="none" stroke="#e8edff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- background -->
+  <rect width="1200" height="675" fill="#0f1426"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect width="1200" height="675" fill="url(#g1)"/>
+  <rect width="1200" height="675" fill="url(#g2)"/>
+
+  <!-- ===== LEFT COLUMN ===== -->
+  <!-- shield -->
+  <g transform="translate(72,120)">
+    <path d="M31 2 L58 13 V36 C58 54 46 65 31 70 C16 65 4 54 4 36 V13 Z" fill="none" stroke="#34d2c0" stroke-width="3"/>
+    <path d="M19 36 L28 46 L45 24" fill="none" stroke="#34d2c0" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <!-- wordmark -->
+  <text x="150" y="178" font-size="62" font-weight="800" letter-spacing="-1">
+    <tspan fill="#e8edff">Fabric</tspan><tspan fill="#34d2c0">Guard</tspan>
+  </text>
+
+  <!-- PUNCHY tagline -->
+  <g font-weight="800" letter-spacing="-0.5">
+    <text x="74" y="296" font-size="52" fill="#e8edff">Say the rule.</text>
+    <text x="74" y="364" font-size="52"><tspan fill="#e8edff">An agent </tspan><tspan fill="#34d2c0">enforces it.</tspan></text>
+  </g>
+
+  <!-- chips -->
+  <g font-size="16" font-weight="600">
+    <rect x="74" y="430" width="196" height="40" rx="20" fill="#ffffff" fill-opacity="0.04" stroke="#2c365a"/>
+    <text x="92" y="455" fill="#9aa7d0">Powered by <tspan fill="#e8edff" font-weight="700">Gemini</tspan></text>
+    <rect x="282" y="430" width="196" height="40" rx="20" fill="#ffffff" fill-opacity="0.04" stroke="#2c365a"/>
+    <text x="300" y="455" fill="#9aa7d0">Grounded in <tspan fill="#e8edff" font-weight="700">Elastic</tspan></text>
+    <rect x="490" y="430" width="232" height="40" rx="20" fill="#ffffff" fill-opacity="0.04" stroke="#2c365a"/>
+    <text x="508" y="455" fill="#9aa7d0">Governs <tspan fill="#e8edff" font-weight="700">Microsoft Fabric</tspan></text>
+  </g>
+
+  <!-- ===== RIGHT COLUMN: speech -> rule -> verdict ===== -->
+  <!-- speech bubble -->
+  <g transform="translate(792,150)">
+    <rect x="0" y="0" width="336" height="78" rx="12" fill="#6d8bff" fill-opacity="0.10" stroke="#6d8bff" stroke-opacity="0.4"/>
+    <text x="18" y="32" font-size="16" font-style="italic" fill="#dfe6ff">&#8220;Every workspace must have</text>
+    <text x="18" y="56" font-size="16" font-style="italic" fill="#dfe6ff">at least two admin groups.&#8221;</text>
+  </g>
+  <text x="960" y="252" font-size="20" fill="#34d2c0" text-anchor="middle">&#9660;</text>
+
+  <!-- rule card -->
+  <g transform="translate(792,266)">
+    <rect x="0" y="0" width="336" height="132" rx="12" fill="#0c1126" stroke="#2c365a"/>
+    <g font-family="DejaVu Sans Mono, Consolas, monospace" font-size="15.5">
+      <text x="18" y="32"><tspan fill="#34d2c0">RULE</tspan><tspan fill="#cdd7ff"> ws-admin-001 {</tspan></text>
+      <text x="18" y="58"><tspan fill="#cdd7ff">  </tspan><tspan fill="#34d2c0">APPLIES_TO</tspan><tspan fill="#cdd7ff">: </tspan><tspan fill="#ffb547">Workspace</tspan></text>
+      <text x="18" y="84"><tspan fill="#cdd7ff">  </tspan><tspan fill="#34d2c0">CHECK</tspan><tspan fill="#cdd7ff"> PERMISSIONS(ADMIN)</tspan></text>
+      <text x="18" y="110"><tspan fill="#cdd7ff">        .count &#8805; 2</tspan></text>
+      <text x="18" y="124" fill="#cdd7ff">}</text>
+    </g>
+  </g>
+  <text x="960" y="424" font-size="20" fill="#34d2c0" text-anchor="middle">&#9660;</text>
+
+  <!-- verdict pills -->
+  <g transform="translate(792,438)">
+    <rect x="0" y="0" width="160" height="46" rx="10" fill="#37d67a" fill-opacity="0.16" stroke="#37d67a" stroke-opacity="0.45"/>
+    <text x="80" y="30" font-size="16" font-weight="800" letter-spacing="1" fill="#37d67a" text-anchor="middle">PASS</text>
+    <rect x="176" y="0" width="160" height="46" rx="10" fill="#ff5d6c" fill-opacity="0.16" stroke="#ff5d6c" stroke-opacity="0.45"/>
+    <text x="256" y="30" font-size="16" font-weight="800" letter-spacing="1" fill="#ff5d6c" text-anchor="middle">FAIL</text>
+  </g>
+
+  <!-- footer -->
+  <text x="74" y="624" font-size="16" fill="#9aa7d0">A multi-agent governance system for <tspan fill="#e8edff" font-weight="700">Microsoft Fabric</tspan></text>
+  <!-- badge -->
+  <g>
+    <rect x="838" y="600" width="290" height="34" rx="17" fill="#ffffff" fill-opacity="0.03" stroke="#2c365a"/>
+    <text x="983" y="622" font-size="13" fill="#9aa7d0" text-anchor="middle">Google Cloud Rapid Agent Hackathon &#183; Elastic Track</text>
+  </g>
+</svg>

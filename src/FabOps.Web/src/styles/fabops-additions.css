@@ -50,7 +50,8 @@
    input textbox span the full width of the space. */
 .chat-page { position: relative; flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .chat-page .chat-area { flex: 1; min-height: 0; }
-.fabops-chat .max-w-3xl { max-width: 100% !important; }
+.fabops-chat .max-w-3xl,
+.fabops-chat .cpk\:max-w-3xl { max-width: 100% !important; }
 
 /* ─── Per-turn identity rows ───────────────────
    Every assistant turn shows the agent avatar + name (the look that used to be a one-off
@@ -119,14 +120,43 @@
   35% { opacity: 1; transform: translateY(-3px); }
 }
 
-/* ─── User turn as a full-width horizontal card (distinct from the plain agent turn) ─── */
-.fabops-chat .msg-row-user {
+/* ─── Message turns as full-width cards — agent and user, visually distinct ─── */
+.fabops-chat .msg-row-agent {
   background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);   /* brand accent marks the assistant */
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+}
+.fabops-chat .msg-row-user {
+  background: var(--bg-surface);            /* flatter than the agent card */
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 14px 16px;
 }
 .fabops-chat .user-content { color: var(--text-bright); font-size: 14px; white-space: pre-wrap; word-break: break-word; }
+
+/* ─── Markdown code blocks (Streamdown) — full width, themed, wrapped (no cramped scroll) ─── */
+.fabops-chat pre {
+  width: 100%; max-width: 100%;
+  background: var(--bg-elevated) !important;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px !important;
+  margin: 8px 0;
+}
+.fabops-chat pre code {
+  display: block;
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 12.5px; line-height: 1.55;
+  color: var(--text-bright) !important;
+  background: none !important;
+  white-space: pre-wrap; word-break: break-word;
+}
+.fabops-chat :not(pre) > code {
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: 4px; padding: 1px 5px; font-size: 12.5px; color: var(--primary-light);
+}
 
 /* ─── Centered starter questions over an empty conversation ─── */
 .starter {

@@ -12,11 +12,9 @@
 name: Deploy API (Azure Functions)
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "src/FabOps.Api/**"
-      - ".github/workflows/deploy-api.yml"
+  # Auto-deploy on push is disabled to prevent failed runs — deploys are done manually via the
+  # Functions Core Tools. To enable CI/CD, set the AZURE_FUNCTIONAPP_PUBLISH_PROFILE secret and
+  # the AZURE_FUNCTIONAPP_NAME variable (see above), then restore the push trigger here.
   workflow_dispatch:
 
 jobs:

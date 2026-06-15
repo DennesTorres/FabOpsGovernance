@@ -40,7 +40,7 @@ When the code goes public for judging, the following become public:
 - The deployment configuration (Foundry agent setup, Container App / Function deploy scripts).
 - The MCP tool server URLs.
 - The architecture, FRL reference, known-issues, and this security document.
-- MIT license terms.
+- Apache 2.0 license terms.
 
 **Material exposure to manage — the custom-tool proxy secret.** The Fabric proxy route (`list_workspaces_in_domain`, and any other route on the same proxy) checks an inbound shared secret passed as an `X-Proxy-Secret` header. If that secret were committed, anyone could call the proxy directly. It must be kept out of the repo — supplied to the Foundry custom tool's connection configuration, not hard-coded in source.
 

@@ -158,7 +158,7 @@ A single agent with every tool attached (store, Fabric REST, Fabric notebooks, l
 - Azure Cosmos DB governance store (`governance-rules` + `governance-results`) with vector search; Cosmos DB MCP Toolkit (reads) + write tool (`save_rule` / `save_results`).
 - Foundry IQ + Azure AI Search knowledge base via `knowledge_base_retrieve`.
 - Fabric MCP + `list_workspaces_in_domain` for domain-scoped runs.
-- React + AG-UI + CopilotKit SPA **and** its .NET AG-UI⇄OpenAI-Responses bridge API (this repository).
+- React + AG-UI + CopilotKit front end (this repository).
 - MCP-direct evaluation path; bounded demo on the **InterWorks** domain.
 
 ![FabOps — future architecture / roadmap](architecture-future.svg)
@@ -177,19 +177,19 @@ See [`known-issues.md`](known-issues.md) for platform/tooling caveats and [`secu
 
 ---
 
-## This repository — the UI and its bridge API
+## This repository — the UI and its API
 
-The agents and MCP tool servers described above are the larger FabOps solution. **This repository is a full-stack component of that solution: the React user interface *and* a .NET backend that bridges it to the agent.** It is the Azure-native conversion of the reference project's `FabOpsUI` (a React SPA + small FastAPI backend on Cloud Run) to a Visual-Studio-standard Azure stack. It contains none of the *agent* logic — no model SDKs, no rule store, no Fabric access — but its API is **not** a passthrough: the agent is exposed over the **OpenAI-Responses** protocol while CopilotKit speaks **AG-UI**, so this backend translates between the two and authenticates the call with the Function App's managed identity.
+The agents and MCP tool servers described above are the larger FabOps solution. **This repository implements one component of it: the user interface and a thin API relay.** It is the Azure-native conversion of the reference project's `FabOpsUI` (a React SPA + small backend) to a Visual-Studio-standard Azure stack. It contains none of the agent logic; it reaches the deployed agent through one configured AG-UI endpoint URL.
 
 ```
-┌──────────────────────────────┐      ┌────────────────────────────────────────┐      ┌──────────────────────────┐
-│  Azure Static Web App        │      │  Azure Functions (.NET 8 isolated)     │      │  The agent system        │
-│  FabOps.Web (Vite + React)   │      │  FabOps.Api                            │      │  (the rest of FabOps)    │
-│                              │ POST │  GET  /api/config   readiness          │      │                          │
-│  CopilotKit (AG-UI)          │──────│  GET  /api/secrets  MSAL ids           │      │  Foundry agent exposed   │
-│   useComponent ×6 render     │ SSE  │  POST /api/agent ─ AG-UI⇄Responses ────┼─(MI)─▶  over OpenAI-Responses   │
-│   tools, MSAL sign-in        │◄─────│  bridge + managed-identity auth        │      │  (reached via Agent:Url) │
-└──────────────────────────────┘      └────────────────────────────────────────┘      └──────────────────────────┘
+┌──────────────────────────────┐      ┌──────────────────────────────────┐      ┌─────────────────────────┐
+│  Azure Static Web App        │      │  Azure Functions (.NET 8 isol.)  │      │  The agent system       │
+│  FabOps.Web (Vite + React)   │      │  FabOps.Api                      │      │  (the rest of FabOps,   │
+│                              │ POST │  GET  /api/config   readiness    │      │   reached via Agent:Url)│
+│  CopilotKit (AG-UI)          │──────│  GET  /api/secrets  MSAL ids     │      │                         │
+│   useComponent ×6 render     │ SSE  │  POST /api/agent ──(relay)───────┼──────┼─▶ FabOps Orchestrator    │
+│   tools, MSAL sign-in        │◄─────│  body + SSE pass through         │      │   over an AG-UI endpoint│
+└──────────────────────────────┘      └──────────────────────────────────┘      └─────────────────────────┘
 ```
 
 **The three endpoints (same contracts as the reference backend):**
@@ -198,30 +198,12 @@ The agents and MCP tool servers described above are the larger FabOps solution. 
 |---|---|---|
 | `GET /api/config` | `{ "agent_url": string \| null }` | the configured `Agent:Url`; `null` makes the chat page show "agent not configured" |
 | `GET /api/secrets` | `{ "tenant_id", "client_id", "client_secret_set" }` | MSAL sign-in config; identifiers only — the secret never leaves the server |
-| `POST /api/agent` | `text/event-stream` | the AG-UI ⇄ OpenAI-Responses bridge (below) |
+| `POST /api/agent` | `text/event-stream` | transparent AG-UI relay (below) |
 
-**A chat turn, end to end.** `CopilotChat` posts the AG-UI `RunAgentInput` (full message history, thread id, run id, and the six render-tool declarations) to `POST /api/agent` with the signed-in user's bearer token. The Function (`AgentFunction`) then does real work — it is a protocol bridge, not a relay:
+**A chat turn, end to end.** `CopilotChat` posts the AG-UI `RunAgentInput` (full message history, thread id, run id, and the declarations of the six render tools) to `POST /api/agent` with the signed-in user's bearer token. The Function optionally validates the platform principal, then forwards the body **byte-for-byte** to `Agent:Url` with `Accept: text/event-stream`. The agent's SSE events stream back through the relay, flushed per chunk, so the browser sees text deltas and tool calls as they are produced. When the agent calls one of the six render tools (`render_table`, `render_donut`, `render_chart`, `render_card`, `render_badge`, `render_code`), CopilotKit renders the matching React component inline; on failure the relay emits an AG-UI `RUN_ERROR` event. The relay holds no conversation state and interprets no payloads — protocol evolution between CopilotKit and the agent does not require touching this API.
 
-1. **Authenticate the caller.** When `Entra:RequireAuthentication` is on, `EntraTokenValidator` validates the bearer token against Microsoft's published OIDC signing keys (no secret); the token is accepted only if its audience is this app's client id, for any Microsoft tenant or personal-account issuer.
-2. **Translate the request.** `ResponsesBridge.BuildResponsesRequest` turns the AG-UI input into an OpenAI-Responses body. Only the user/assistant turns are forwarded: the Foundry *prompt* agent owns its tools and base prompt server-side and rejects client `tools`, `instructions`, and system/developer items with HTTP 400, so those are dropped here (a verified live constraint — exactly why this is not a byte-for-byte passthrough).
-3. **Authenticate outbound.** The Function App's **managed identity** (`DefaultAzureCredential`) obtains a bearer token for `Agent:TokenScope` and calls `Agent:Url` (the agent's Responses endpoint) with `Accept: text/event-stream`. No secret is stored; locally the credential falls back to the developer's az / Visual Studio login.
-4. **Translate the stream back.** `ResponsesBridge.TranslateAsync` reads the Responses SSE events and emits the matching AG-UI events: `response.output_text.delta` → AG-UI text start/content/end; `function_call` items → AG-UI tool start/args/end (so the six `render_*` tools render inline in CopilotKit); `response.completed` → `RUN_FINISHED`; `response.failed` / `error` → `RUN_ERROR`. A 15-second keep-alive heartbeat holds the SSE connection open through proxies during long agent runs.
+**The generative-UI render tools** are display-only frontend components registered as agent tools. Their contract is [`ui-render-primitives.md`](ui-render-primitives.md); how the agent should use them (for the agent team's prompt) is [`ui-rendering-skill.md`](ui-rendering-skill.md).
 
-So the bridge **does** interpret payloads and **does** hold per-stream state (the current text item, the function-call-id map). What it does *not* hold is any of the agent's reasoning, storage, or Fabric access — those stay in the agent system on the other side of `Agent:Url`.
+**Security (this component).** SPA sign-in uses MSAL (popup → redirect fallback). In Azure, the Function App's App Service Authentication validates bearer tokens at the platform; with `Entra:RequireAuthentication=true` the relay refuses requests without a validated principal (`/api/config` and `/api/secrets` stay anonymous to bootstrap sign-in, identifiers only). Any downstream agent secret lives in Function App settings, never in the browser. Full solution-wide auth model: [`security.md`](security.md).
 
-**The generative-UI render tools** are display-only React components registered as agent tools. Their contract is [`ui-render-primitives.md`](ui-render-primitives.md); how the agent should use them (for the agent team's prompt) is [`ui-rendering-skill.md`](ui-rendering-skill.md).
-
-**Security (this component).** SPA sign-in uses MSAL (popup → redirect fallback). **Inbound** to `/api/agent`: the bespoke `EntraTokenValidator` above, enabled by `Entra:RequireAuthentication` (`/api/config` and `/api/secrets` stay anonymous to bootstrap sign-in — identifiers only, never the secret). **Outbound** to the agent: the Function App's managed identity, so no agent secret is stored anywhere. The full solution-wide auth model is in [`security.md`](security.md).
-
-**Configuration**
-
-| Setting (app-setting form) | Required | Purpose |
-|---|---|---|
-| `Agent__Url` | yes | the agent's Azure OpenAI **Responses** endpoint (including any `api-version`); unset → UI shows "agent not configured" |
-| `Agent__TokenScope` | no | Entra scope the managed identity requests for the agent (defaults to `https://ai.azure.com/.default`) |
-| `Entra__TenantId`, `Entra__ClientId` | yes | served to the SPA for MSAL sign-in |
-| `Entra__ClientSecret` | no | only reported as `client_secret_set`; never served |
-| `Entra__RequireAuthentication` | no | `true` in Azure to gate `/api/agent` on a validated bearer token |
-| `VITE_API_BASE_URL` (SPA build) | in Azure | Function App origin; empty locally (Vite proxies `/api`) |
-
-**Build / run / deploy** and every deliberate divergence from the reference project are in [`DECISIONS.md`](DECISIONS.md); a quick start is in the repository [`README.md`](../README.md). The SPA calls the Function App origin **directly**, not through the Static Web Apps `/api` proxy, whose hard 45-second limit would cut off long agent runs.
+**Build / run / deploy** and every deliberate divergence from the reference project are in [`DECISIONS.md`](DECISIONS.md); a quick start is in the repository [`README.md`](../README.md). Note that the SPA calls the Function App origin **directly**, not through the Static Web Apps `/api` proxy, whose hard 45-second limit would cut off long agent runs.

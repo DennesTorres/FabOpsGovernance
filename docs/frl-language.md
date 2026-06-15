@@ -359,9 +359,9 @@ RULE ont-domain-001 {
 
 ---
 
-## Elastic Storage Format
+## Storage Format
 
-Rules are stored as JSON documents. The FRL source is stored verbatim in a `source` field alongside parsed metadata for indexing and filtering.
+Rules are stored as JSON documents in the governance store (Azure Cosmos DB). The FRL source is stored verbatim in a `source` field alongside parsed metadata for indexing and filtering.
 
 ```json
 {

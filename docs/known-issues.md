@@ -36,7 +36,7 @@ Documents the constraints this project hit while building on **Azure AI Foundry*
 
 ## 5. The data-plane (notebook) evaluation path is deferred
 
-The FRL namespaces `delta.*`, `schema.*`, `access.*`, and `spark.*` require Spark to read the Fabric data plane and therefore run as Fabric notebooks. That path is **on the roadmap**, not in the demo. The demo evaluates rules whose checks resolve through Fabric **metadata** (the MCP-direct path). FRL still *accepts* data-plane rules — they simply route to the notebook path once it ships (see the future architecture diagram and `ARCHITECTURE.md`).
+The FRL namespaces `delta.*`, `schema.*`, `access.*`, and `spark.*` require Spark to read the Fabric data plane and therefore run as Fabric notebooks. That path is **on the roadmap**, not in the demo. The demo evaluates rules whose checks resolve through Fabric **metadata** (the MCP-direct path). FRL still *accepts* data-plane rules — they simply route to the notebook path once it ships (see the future architecture diagram and `architecture.md`).
 
 ## 6. Carrying conversational context into each turn
 

@@ -10,18 +10,17 @@ public sealed class AgentOptions
     public const string SectionName = "Agent";
 
     /// <summary>
-    /// The agent's OpenAI-Responses endpoint, including any required <c>api-version</c> query
-    /// string. Unset = the UI shows "agent not configured".
-    /// Example: <c>https://&lt;resource&gt;.services.ai.azure.com/api/projects/&lt;p&gt;/agents/&lt;a&gt;/endpoint/protocols/openai/responses</c>.
+    /// The Foundry <b>project</b> endpoint that hosts the agent. Unset = the UI shows
+    /// "agent not configured". Example:
+    /// <c>https://&lt;resource&gt;.services.ai.azure.com/api/projects/&lt;project&gt;</c>.
     /// </summary>
-    public string? Url { get; set; }
+    public string? ProjectEndpoint { get; set; }
 
     /// <summary>
-    /// Entra token scope the managed identity requests to call the agent. Defaults to the
-    /// Foundry scope; set to <c>https://cognitiveservices.azure.com/.default</c> if the resource
-    /// requires it. No value needs to be set for the common case.
+    /// The Foundry agent to wrap (its latest version is used automatically), e.g.
+    /// <c>fabopsorchestrator</c>. Its tools and instructions are owned by the Foundry definition.
     /// </summary>
-    public string TokenScope { get; set; } = "https://ai.azure.com/.default";
+    public string? AgentName { get; set; }
 }
 
 /// <summary>

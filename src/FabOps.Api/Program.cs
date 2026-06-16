@@ -54,11 +54,21 @@ app.Use(async (ctx, next) =>
 // to the project (no secret).
 if (!string.IsNullOrWhiteSpace(agentOptions.ProjectEndpoint) && !string.IsNullOrWhiteSpace(agentOptions.AgentName))
 {
-    var project = new AIProjectClient(new Uri(agentOptions.ProjectEndpoint), new DefaultAzureCredential());
-    ProjectsAgentRecord record = await project.AgentAdministrationClient.GetAgentAsync(agentOptions.AgentName);
-    AIAgent agent = project.AsAIAgent(record);
-
-    app.MapAGUI("/api/agent", agent);
+    try
+    {
+        var project = new AIProjectClient(new Uri(agentOptions.ProjectEndpoint), new DefaultAzureCredential());
+        ProjectsAgentRecord record = await project.AgentAdministrationClient.GetAgentAsync(agentOptions.AgentName);
+        app.MapAGUI("/api/agent", project.AsAIAgent(record));
+    }
+    catch (Exception ex)
+    {
+        // The agent couldn't be resolved at startup — most likely the managed identity isn't yet
+        // granted on the Foundry project. Start anyway so /api/config and /api/secrets serve; the
+        // agent endpoint returns 503 until the grant lands and the app is restarted.
+        app.Logger.LogError(ex, "Could not reach the Foundry agent at startup; /api/agent disabled until restart.");
+        app.MapMethods("/api/agent", new[] { "GET", "POST" }, () =>
+            Results.Problem("Agent backend is not available yet.", statusCode: StatusCodes.Status503ServiceUnavailable));
+    }
 }
 
 // ── GET /api/config & /api/secrets — SPA readiness + sign-in config (unchanged contract) ──────

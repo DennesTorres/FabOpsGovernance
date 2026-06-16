@@ -218,7 +218,33 @@ export function RenderBadge({ label, tone, detail }: Partial<RenderBadgeProps>) 
   );
 }
 
+// An FRL rule body opens with `RULE <id> {`; its top-level keywords (docs/frl-language.md) each
+// begin their own line. FRL_ALREADY_FORMATTED detects a rule that still has its line breaks.
+const FRL_RULE = /^\s*RULE\s+[^\s{]+\s*\{/;
+const FRL_ALREADY_FORMATTED = /\n\s*(NAME|VERSION|SEVERITY|APPLIES_TO|PARAMS|CHECK|FINDING|REMEDIATION)\b/;
+
+/**
+ * Best-effort pretty-print for an FRL rule that arrived flattened onto one line — its newlines
+ * stripped upstream, leaving only alignment spaces. Re-inserts a break before each top-level
+ * keyword so the rule reads as written. FRL that already carries its own line breaks, and any
+ * non-FRL string, is returned untouched. Keyword `:` anchors and the start/end `{`/`}` anchors
+ * keep it from touching string literals (e.g. the `{displayName}` inside a FINDING message). This
+ * is intentionally FRL-specific — render_rule_source only ever carries FRL.
+ */
+function formatRuleSource(src: string): string {
+  if (!FRL_RULE.test(src) || FRL_ALREADY_FORMATTED.test(src)) return src;
+  return src
+    .replace(/[ \t]{2,}/g, ' ')                                                          // drop alignment padding
+    .trim()
+    .replace(/^(\s*RULE\s+[^\s{]+)\s*\{\s*/i, '$1 {\n  ')                                 // break after the opening brace
+    .replace(/\s+(NAME|VERSION|SEVERITY|APPLIES_TO|FINDING|REMEDIATION):/g, '\n  $1:')    // `keyword:` fields
+    .replace(/\s+(CHECK)\s+/g, '\n  $1 ')                                                 // CHECK lines (no colon)
+    .replace(/\s+(PARAMS)\s*\{/g, '\n  $1 {')                                             // PARAMS block
+    .replace(/\s*\}\s*$/, '\n}');                                                         // break before the final brace
+}
+
 export function RenderRuleSource({ code, language, title }: Partial<RenderRuleSourceProps>) {
+  const display = code ? formatRuleSource(code) : '';
   return (
     <div className="rp rp-code">
       {(title || language) && (
@@ -227,7 +253,7 @@ export function RenderRuleSource({ code, language, title }: Partial<RenderRuleSo
           {language && <span className="rp-code-lang">{language}</span>}
         </div>
       )}
-      <pre><code>{code ?? ''}</code></pre>
+      <pre><code>{display}</code></pre>
     </div>
   );
 }

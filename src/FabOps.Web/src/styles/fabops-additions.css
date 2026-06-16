@@ -82,6 +82,10 @@
   color: var(--muted-light); cursor: pointer; font-size: 13px; line-height: 1;
 }
 .env-notice-pop-close:hover { color: var(--text-head); }
+/* Reserve space at the top of the chat so the first message clears the floating chips that sit
+   at top:12px — the test-environment notice (left) and the Sample-questions button (right).
+   Scoped via :has so it only applies where the notice is rendered (FabOps). */
+.chat-area:has(.env-notice-wrap) { padding-top: 34px; }
 
 /* ─── Per-turn identity rows ───────────────────
    Every assistant turn shows the agent avatar + name (the look that used to be a one-off

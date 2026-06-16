@@ -108,7 +108,7 @@ FabOpsGovernance.sln
 └── tests/FabOps.Tests  xUnit: endpoint contracts + relay behaviour
 ```
 
-The SPA is built with **React + AG-UI + CopilotKit**: the user chats with the Orchestrator and the agent renders rich results inline by calling six display-only render tools (`render_table`, `render_donut`, `render_chart`, `render_card`, `render_badge`, `render_code`). The `/api/agent` endpoint is a transparent **AG-UI relay** that forwards the request to the configured agent and streams its SSE events straight back, holding no conversation state.
+The SPA is built with **React + AG-UI + CopilotKit**: the user chats with the Orchestrator and the agent renders rich results inline by calling six display-only render tools (`render_table`, `render_donut`, `render_chart`, `render_card`, `render_badge`, `render_rule_source`). The `/api/agent` endpoint is a transparent **AG-UI relay** that forwards the request to the configured agent and streams its SSE events straight back, holding no conversation state.
 
 **Run locally.** Open `FabOpsGovernance.sln` (Visual Studio 2022 17.8+/2026 with the *Azure development* + *JavaScript and TypeScript* workloads — or .NET 8 SDK + Node 20 + Azure Functions Core Tools). Fill `src/FabOps.Api/local.settings.json` (git-ignored) — at minimum `Agent__Url` and `Entra__TenantId` / `Entra__ClientId` — then start `FabOps.Api` + `FabOps.Web` (F5 multi-startup, or `func start` + `npm run dev`) and browse `http://localhost:5173`. `dotnet test` runs the unit tests with no cloud resources.
 

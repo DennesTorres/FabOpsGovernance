@@ -3,7 +3,7 @@ import {
   renderBadgeSchema,
   renderCardSchema,
   renderChartSchema,
-  renderCodeSchema,
+  renderRuleSourceSchema,
   renderDonutSchema,
   renderKpiSchema,
   renderTableSchema,
@@ -12,7 +12,7 @@ import {
   RenderBadge,
   RenderCard,
   RenderChart,
-  RenderCode,
+  RenderRuleSource,
   RenderDonut,
   RenderKpi,
   RenderTable,
@@ -97,14 +97,15 @@ export function RenderPrimitivesRegistrar() {
   }, []);
 
   useComponent({
-    name: 'render_code',
+    name: 'render_rule_source',
     description:
-      'Code block — use to show the exact definition of a governance rule in Fabric Rule Language (FRL), or a structured ' +
-      'specification, when the user needs to read or review the actual logic — above all, the proposed FRL ' +
-      'of a rule before they approve saving it. Choose this whenever the user must see precisely how a rule ' +
-      'is written or what it checks, rather than a plain-language summary of it.',
-    parameters: renderCodeSchema,
-    render: RenderCode,
+      'Rule source — use to show the exact definition of a governance rule in Fabric Rule Language (FRL): ' +
+      'the literal rule text a user reads or reviews — above all, the proposed FRL of a rule before they ' +
+      'approve saving it. Only for FRL rule definitions, never for general code, JSON, or other snippets. ' +
+      'Choose it whenever the user must see precisely how a rule is written and what it checks, rather than ' +
+      'a plain-language summary.',
+    parameters: renderRuleSourceSchema,
+    render: RenderRuleSource,
   }, []);
 
   useComponent({

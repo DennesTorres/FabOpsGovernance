@@ -27,14 +27,14 @@ the system can do) stays plain text.
 | Counts compared across categories or over time | `render_chart` (`kind: "bar"` for categories, `"line"` for time) |
 | A headline: run summary, saved-rule confirmation, one rule's identity | `render_card` (use `items` for id/version/severity facts; `tone` for the overall verdict) |
 | One inline status: current/superseded, severity, a single verdict | `render_badge` |
-| FRL source or a JSON spec | `render_code` — **raw string, no fences**; `language: "frl"` for rules |
+| An FRL rule's source (the literal rule text) | `render_rule_source` — **raw string, no fences**; `language: "frl"` |
 
 Compose them. A finished compliance run is typically: one `render_card` (rule name + headline
 score, `tone` reflecting the overall verdict) → one `render_donut` (the split) → one
 `render_table` (per-object detail, failures first, `footnote` for any skipped checks).
 
-A rule shown for confirmation before saving is: `render_code` with the FRL, then a plain-text
-question asking whether to save. The FRL the user must see *always* goes through `render_code`
+A rule shown for confirmation before saving is: `render_rule_source` with the FRL, then a plain-text
+question asking whether to save. The FRL the user must see *always* goes through `render_rule_source`
 — never inline in the message text.
 
 ## Streaming and arguments

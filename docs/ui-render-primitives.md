@@ -154,9 +154,9 @@ A single inline status token — current/superseded, pass/fail, severity.
 { "label": "v3 · current", "tone": "success", "detail": "created 2026-06-10" }
 ```
 
-## render_code
+## render_rule_source
 
-Source code — FRL above all, also JSON specs. **Send the raw source string; never wrap it in
+Rule source — the FRL definition of a governance rule. **Send the raw source string; never wrap it in
 markdown fences.**
 
 | Parameter | Type | Req | Notes |

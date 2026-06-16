@@ -76,12 +76,12 @@ export const renderBadgeSchema = z.object({
 });
 export type RenderBadgeProps = z.infer<typeof renderBadgeSchema>;
 
-export const renderCodeSchema = z.object({
+export const renderRuleSourceSchema = z.object({
   code: z.string().describe('Raw source string with newlines - NEVER wrapped in markdown fences'),
   language: z.string().optional().describe('e.g. "frl" or "json" - shown as a label'),
   title: z.string().optional().describe('e.g. the rule file name'),
 });
-export type RenderCodeProps = z.infer<typeof renderCodeSchema>;
+export type RenderRuleSourceProps = z.infer<typeof renderRuleSourceSchema>;
 
 export const renderKpiSchema = z.object({
   items: z

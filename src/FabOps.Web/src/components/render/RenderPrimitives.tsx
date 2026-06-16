@@ -2,7 +2,7 @@ import {
   RenderBadgeProps,
   RenderCardProps,
   RenderChartProps,
-  RenderCodeProps,
+  RenderRuleSourceProps,
   RenderDonutProps,
   RenderKpiProps,
   RenderTableProps,
@@ -218,7 +218,7 @@ export function RenderBadge({ label, tone, detail }: Partial<RenderBadgeProps>) 
   );
 }
 
-export function RenderCode({ code, language, title }: Partial<RenderCodeProps>) {
+export function RenderRuleSource({ code, language, title }: Partial<RenderRuleSourceProps>) {
   return (
     <div className="rp rp-code">
       {(title || language) && (

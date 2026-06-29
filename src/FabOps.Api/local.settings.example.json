@@ -1,0 +1,19 @@
+{
+  "_comment": "Template for src/FabOps.Api/local.settings.json (which is git-ignored). Copy this file to 'local.settings.json' and fill the placeholders. Values use the App-setting form 'Section__Key'.",
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+
+    "Agent__Url": "https://<foundry-resource>.services.ai.azure.com/api/projects/<project>/agents/<orchestrator-agent>/endpoint/protocols/openai/responses?api-version=2025-11-15-preview",
+    "Agent__TokenScope": "https://ai.azure.com/.default",
+
+    "Entra__TenantId": "<entra-tenant-guid>",
+    "Entra__ClientId": "<spa-app-registration-client-id>",
+    "Entra__ClientSecret": "",
+    "Entra__RequireAuthentication": "false"
+  },
+  "Host": {
+    "CORS": "*"
+  }
+}

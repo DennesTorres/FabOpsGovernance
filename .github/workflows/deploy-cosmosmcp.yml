@@ -1,0 +1,41 @@
+# Deploys the Cosmos DB MCP server (FabOps.CosmosMcp) to Azure Functions.
+#
+# One-time setup:
+#   1. Create the Function App (Flex Consumption recommended; .NET 8 isolated) and assign it a
+#      system-assigned managed identity, then grant that identity the two data-plane roles in
+#      src/FabOps.CosmosMcp/README.md (Cosmos DB Built-in Data Contributor + Cognitive Services
+#      OpenAI User) and set its app settings (COSMOS_ENDPOINT, COSMOS_DATABASE, AZURE_OPENAI_*).
+#   2. Repo Settings -> Secrets and variables -> Actions:
+#        secret   AZURE_FUNCTIONAPP_COSMOSMCP_PUBLISH_PROFILE = the app's publish profile XML
+#        variable AZURE_FUNCTIONAPP_COSMOSMCP_NAME            = the Function App name
+#
+# Mirrors deploy-api.yml. Visual Studio right-click Publish (or `func azure functionapp publish`)
+# works as well -- this workflow is the CI/CD equivalent.
+
+name: Deploy Cosmos MCP (Azure Functions)
+
+on:
+  # Auto-deploy on push is disabled to prevent failed runs -- deploys are done manually via the
+  # Functions Core Tools. To enable CI/CD, set the AZURE_FUNCTIONAPP_COSMOSMCP_PUBLISH_PROFILE
+  # secret and the AZURE_FUNCTIONAPP_COSMOSMCP_NAME variable (above), then add a push trigger here.
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Publish
+        run: dotnet publish src/FabOps.CosmosMcp/FabOps.CosmosMcp.csproj --configuration Release --output ./publish
+
+      - name: Deploy
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ vars.AZURE_FUNCTIONAPP_COSMOSMCP_NAME }}
+          package: ./publish
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_COSMOSMCP_PUBLISH_PROFILE }}

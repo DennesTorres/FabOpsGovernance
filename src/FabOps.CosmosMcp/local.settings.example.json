@@ -1,0 +1,13 @@
+{
+  "_comment": "Template for src/FabOps.CosmosMcp/local.settings.json (git-ignored). Copy to 'local.settings.json' and fill the placeholders. The function reaches Cosmos and Azure OpenAI with DefaultAzureCredential (your 'az login' identity locally) — no keys.",
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "COSMOS_ENDPOINT": "https://<cosmos-account>.documents.azure.com:443/",
+    "COSMOS_DATABASE": "fabops-governance",
+    "AZURE_OPENAI_ENDPOINT": "https://<aoai-resource>.cognitiveservices.azure.com/",
+    "AZURE_OPENAI_EMBEDDING_DEPLOYMENT": "text-embedding-3-large",
+    "AZURE_OPENAI_EMBEDDING_DIMENSIONS": "1536"
+  }
+}

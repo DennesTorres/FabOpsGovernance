@@ -1,0 +1,26 @@
+{
+  "_comment": "Shape of one agent definition. export-agents.ps1 writes a real <agent-name>.json per live agent here (overwriting this is not needed -- it is ignored by deploy-agents.ps1). deploy-agents.ps1 reads the others back to (re)create the agents. You can also hand-author definitions in this shape.",
+  "name": "fabopsorchestrator",
+  "model": "<gpt-4.1-deployment-name>",
+  "description": "FabOps Orchestrator - the front door; routes explain / author / run and stays in front of the user.",
+  "instructions": "<the agent's full system prompt goes here>",
+  "tools": [
+    {
+      "_note": "AG-UI render tools the agent calls to draw UI (the bridge turns these function-calls into AG-UI tool events that CopilotKit renders). Each is a normal function tool with its own JSON-schema parameters.",
+      "type": "function",
+      "function": { "name": "render_table", "description": "Render a table.", "parameters": { "type": "object", "properties": {} } }
+    },
+    {
+      "_note": "MCP tool - e.g. the Cosmos governance store (FabOps.CosmosMcp). The key is part of the URL; keep it out of source.",
+      "type": "mcp",
+      "server_label": "cosmos",
+      "server_url": "https://func-fabops-cosmosmcp.azurewebsites.net/runtime/webhooks/mcp/sse?code=<mcp_extension-key>"
+    },
+    {
+      "_note": "A2A link - the orchestrator calls a specialist. Create specialists first so their ids exist.",
+      "type": "connected_agent",
+      "connected_agent": { "id": "<specialist-agent-id>", "name": "rules_generator_manager", "description": "Author/manage FRL rules and persist run results." }
+    }
+  ],
+  "metadata": {}
+}
